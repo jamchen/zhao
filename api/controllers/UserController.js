@@ -1,3 +1,5 @@
+
+var passport = require('passport');
 /**
  * UserController
  *
@@ -8,14 +10,23 @@
 module.exports = {
 	
 
+  // _config: {
+  //   actions: false,
+  //   shortcuts: false,
+  //   rest: false
+  // },
 
   /**
    * `UserController.login()`
    */
   login: function (req, res) {
-    return res.json({
-      todo: 'login() is not implemented yet!'
+    if (res.login) {
+    return res.login({
+      successRedirect: '/'
     });
+
+    }
+    return res.ok('No res.login');
   },
 
 
@@ -23,9 +34,8 @@ module.exports = {
    * `UserController.logout()`
    */
   logout: function (req, res) {
-    return res.json({
-      todo: 'logout() is not implemented yet!'
-    });
+    req.logout();
+    return res.redirect('/');
   },
 
 
@@ -33,8 +43,17 @@ module.exports = {
    * `UserController.signup()`
    */
   signup: function (req, res) {
-    return res.json({
-      todo: 'signup() is not implemented yet!'
+    console.log('UserController signup');
+      
+    User.create(req.params.all()).exec(function (err, user) {
+      if (err) return res.negotiate(err);
+      if (req.login) {
+      req.login(user, function (err){
+        if (err) return res.negotiate(err);
+        return res.redirect('/welcome');
+      });
+
+      }
     });
   }
 };
