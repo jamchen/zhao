@@ -20,13 +20,10 @@ module.exports = {
    * `UserController.login()`
    */
   login: function (req, res) {
-    if (res.login) {
     return res.login({
+      strategy: 'local',
       successRedirect: '/'
     });
-
-    }
-    return res.ok('No res.login');
   },
 
 
@@ -55,6 +52,23 @@ module.exports = {
 
       }
     });
+  },
+
+  fbLogin: function(req, res) {
+    return res.login({
+      strategy: 'facebook',
+      successRedirect: '/'
+    });
+        
+  },
+
+  fbAuthCallback: function(req, res) {
+    return res.login({
+      strategy: 'facebook',
+      successRedirect: '/welcome'
+    });
   }
+
+
 };
 

@@ -30,11 +30,12 @@ module.exports = function login(opts) {
 
   // Merge provided options into defaults
   var passportOpts = _.extend({
-    successRedirect: '/'
+    successRedirect: '/',
+    strategy: 'local'
   }, opts || {});
   
   // Configure passport's login with our strategy
-  var configuredLogin = passport.authenticate('local', function (err, user, info){
+  var configuredLogin = passport.authenticate(passportOpts.strategy, function (err, user, info){
     console.log('RUNNING THE PASSPORT thing');
     if (err) return res.negotiate(err);
     if (!user) return res.forbidden(info);

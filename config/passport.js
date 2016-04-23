@@ -2,13 +2,11 @@ var passport = require('passport');
 console.log('Passport session setup2');
 // Teach our Passport how to serialize/dehydrate a user object into an id
 passport.serializeUser(function(user, done) {
-  console.log('Passport serializeUser');
   done(null, user.id);
 });
 
 // Teach our Passport how to deserialize/hydrate an id back into a user object
 passport.deserializeUser(function(id, done) {
-  console.log('Passport deserializeUser');
   User.findOne(id, function(err, user) {
     done(err, user);
   });
@@ -43,4 +41,27 @@ passport.use(new LocalStrategy(
 			}
 		});
 	}
+));
+
+var FacebookStrategy = require('passport-facebook').Strategy;
+passport.use(new FacebookStrategy({
+    clientID: YOUR_FB_CLIENT_ID,
+    clientSecret: YOUR_FB_CLIENT_SECRET,
+    callbackURL: "http://www.zhao.com:1337/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+  	console.log('arguments', arguments);
+  	console.log('fb auth', profile);
+    User.findOrCreate({
+    	fbId: profile.id,    	
+    }, {
+    	fbID: profile.id,
+    	fbtoken: refreshToken,
+    	displayName: profile.displayName,
+    }, function(err, user) {
+    	console.log('find or create user', user);
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
 ));

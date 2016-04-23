@@ -40,7 +40,9 @@ module.exports.routes = {
   '/welcome': { view: 'user/welcome' },
   'post /login': 'UserController.login',
   'post /signup': 'UserController.signup',
-  '/logout': 'UserController.logout'
+  '/logout': 'UserController.logout',
+  '/auth/facebook': 'UserController.fbLogin',
+  '/auth/facebook/callback': 'UserController.fbAuthCallback'
 
   /***************************************************************************
   *                                                                          *
