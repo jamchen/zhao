@@ -7,13 +7,21 @@
 
 module.exports = {
 
-  attributes: {
-
-    login : { type: 'string' },
-
-    logout : { type: 'string' },
-
-    signup : { type: 'string' }
-  }
+	attributes: {
+		username: {
+			type: 'string',
+			required: true,
+			unique: true
+		},
+		password: {
+			type: 'string',
+			required: true
+		},
+	    toJSON: function() {
+	      var obj = this.toObject();
+	      delete obj.password;
+	      return obj;
+	    }
+	},
 };
 
