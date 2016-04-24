@@ -19,6 +19,7 @@ module.exports = {
   	},
   	uploader: {
   		model: 'user',
+  		via: 'picture',
   		required: true,
   	}
   }

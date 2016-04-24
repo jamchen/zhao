@@ -23,6 +23,7 @@ module.exports = {
   	},
   	creator: {
   		model: 'user',
+  		via: 'contactInfo',
 			required: true
   	}
   }
