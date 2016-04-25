@@ -12,10 +12,18 @@ module.exports = {
     	type: 'string',
   		required: true
 		},
+		kind: {
+    	type: 'string',
+  		required: true			
+		},
 		gender: {
 			type: 'string',
 			required: true,
 			enum: ['male', 'female']
+		},
+		color: {
+    	type: 'string',
+  		required: true
 		},
 		size: {
 			type: 'string',
@@ -23,6 +31,14 @@ module.exports = {
 			enum: ['small', 'medium', 'large']
 		},
 		neuter: {
+			type: 'boolean',
+			required: true,			
+		},
+		hasMicrochip: {
+			type: 'boolean',
+			required: true,			
+		},
+		hasCollars: {
 			type: 'boolean',
 			required: true,			
 		},
@@ -42,6 +58,9 @@ module.exports = {
 		},
 		description: {
 			type: 'text'
+		},
+		age: {
+			type: 'integer'
 		},
 		picture: {
 			collection: 'Picture',
