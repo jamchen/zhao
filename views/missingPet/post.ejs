@@ -1,9 +1,10 @@
 <div class="row">
-  <form class="col s12">
+  <form class="col s12" action="#">
+    <h4>寵物資訊</h4>
     <div class="row">
       <div class="input-field col s12 m6">
         <input placeholder="例：弟弟、妹妹" id="name" type="text" class="validate">
-        <label for="first_name">寵物名稱</label>
+        <label>寵物名稱</label>
       </div>
       <div class="input-field col s12 m6">
         <select id="kind">
@@ -26,12 +27,12 @@
       </div>
       <div class="input-field col s12 m6">
         <input placeholder="例：黑、玳瑁" id="color" type="text" class="validate">
-        <label for="first_name">花色</label>
+        <label>花色</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12 m6">
-        <select id="gender">
+        <select id="size">
           <option value="" disabled selected>請選擇</option>
           <option value="large">大</option>
           <option value="medium">中</option>
@@ -39,8 +40,84 @@
         </select>
         <label>體型</label>
       </div>
+      <div class="input-field col s12 m6">
+        <select id="neuter">
+          <option value="" disabled selected>請選擇</option>
+          <option value="true">是</option>
+          <option value="false">否</option>
+        </select>
+        <label>是否已結紮</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <select id="hasMicrochip">
+          <option value="" disabled selected>請選擇</option>
+          <option value="true">是</option>
+          <option value="false">否</option>
+        </select>
+        <label>是否有植入晶片</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <select id="hasCollars">
+          <option value="" disabled selected>請選擇</option>
+          <option value="true">是</option>
+          <option value="false">否</option>
+        </select>
+        <label>走失時是否有戴項圈</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <input placeholder="例：新北市中和區連城路" id="location" type="text" class="validate">
+        <label>走失地點</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <input placeholder="走失日期" type="date" class="datepicker" id="missingDate" class="validate">
+        <label class="active">走失日期</label>
+      </div>
+      <div class="file-field input-field col s12 m6">
+        <div class="btn">
+          <span>寵物照片</span>
+          <input type="file" multiple>
+        </div>
+        <div class="file-path-wrapper">
+          <input class="file-path validate" type="text" placeholder="選擇上傳照片">
+        </div>
+      </div>
+      <p class="range-field col s12 m6">
+        <input type="range" id="age" min="0" max="30" value="0">
+        <label for="age">寵物年齡（非必填）</label>
+      </p>
+
+      <div class="input-field col s12 m6">
+        <input placeholder="例：米克斯" id="breed" type="text" class="validate">
+        <label>品種（非必填）</label>
+      </div>
+      
     </div>
     <div class="row">
+      <div class="input-field col s12">
+        <i class="material-icons prefix">mode_edit</i>
+        <textarea placeholder="特徵形容。例：額頭上有一黑色的王字"id="description" class="materialize-textarea"></textarea>
+        <label for="description">其他描述</label>
+      </div>
     </div>
+    <h4>聯絡資訊</h4>
+    <div class="row">  
+      <div class="input-field col s12 m6">
+        <i class="material-icons prefix">perm_contact_calendar</i>          
+        <input placeholder="例：王先生" id="contactInfo.name" type="text" class="validate">
+        <label>名稱</label>
+      </div>
+      <div class="input-field col s12 m6">
+        <i class="material-icons prefix">phone</i>
+        <input placeholder="例：0931234567" id="contactInfo.phone" type="tel" class="validate">
+        <label for="contactInfo.phone">聯絡電話</label>
+      </div>
+    </div>
+    <div class="row right-align">
+      <button class="waves-effect waves-light btn-large" type="submit" name="action">
+      刊登
+        <i class="material-icons right">send</i>
+      </button>
+    </div>
+
   </form>
 </div>

@@ -49,7 +49,7 @@ module.exports = {
 			type: 'string',
   		required: true
 		},
-		missDate: {
+		missingDate: {
 			type: 'datetime',
   		required: true	
 		},
