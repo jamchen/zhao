@@ -31,11 +31,13 @@
     <!--STYLES-->
     <link rel="stylesheet" href="/styles/importer.css">
     <!--STYLES END-->
-      
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
 
   <body>
+    <%- partial ('navbar.ejs') %>
     <div class="container">
+
     <%- body %>
     </div>
 
@@ -124,6 +126,7 @@
     <script src="/js/dependencies/materialize/transitions.js"></script>
     <script src="/js/dependencies/materialize/velocity.min.js"></script>
     <script src="/js/dependencies/materialize/waves.js"></script>
+    <script src="/js/init.js"></script>
     <!--SCRIPTS END-->
   </body>
 </html>
