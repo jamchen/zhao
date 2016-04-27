@@ -51,7 +51,7 @@ module.exports = {
   /*
   set heroku env var like heroku config:set HEROKU_URL=https://sheltered-ridge.herokuapp.com/
   */
-  explicitHost: process.env.HEROKU_HOSTNAME || 'www.zhao.com',
+  // explicitHost: process.env.HEROKU_HOSTNAME || 'www.zhao.com',
 
   passport: {
     facebook: {
