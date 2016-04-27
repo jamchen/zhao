@@ -10,6 +10,11 @@
  *
  */
 
+var modelsConnection = 'localMongodbServer';
+if (process.env.MONGODB_URI) {
+  modelsConnection = 'herokuMongodbServer';
+}
+
 module.exports = {
 
   /***************************************************************************
@@ -17,15 +22,15 @@ module.exports = {
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
 
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+  models: {
+    connection: modelsConnection
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
    ***************************************************************************/
 
-  // port: 80,
+  port: process.env.PORT || 80,
 
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
@@ -35,4 +40,25 @@ module.exports = {
   //   level: "silent"
   // }
 
+  session: {
+    adapter: 'connect-mongo',
+    url: process.env.MONGODB_URI || 'mongodb://localhost:27017/zhao',
+    collection: 'sessions',
+    auto_reconnect: false,
+    ssl: false,
+    stringify: true   
+  },
+  /*
+  set heroku env var like heroku config:set HEROKU_URL=https://sheltered-ridge.herokuapp.com/
+  */
+  explicitHost: process.env.HEROKU_URL || 'www.zhao.com',
+
+  passport: {
+    facebook: {
+      options: {
+        clientID: process.env.FB_CLIENT_ID,
+        clientSecret: process.env.FB_CLIENT_SECRET,
+      }
+    }
+  }
 };

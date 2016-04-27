@@ -19,6 +19,28 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
 
+var herokuMongodbServer = undefined;
+if (process.env.MONGODB_URI) {
+  console.log('parsing MONGODB_URI', process.env.MONGODB_URI);
+  var re = /^mongodb:\/\/([^:]*):([^@]*)@([^:]*):([^\/]*)\/(.*)/; 
+  var m;
+ 
+  if ((m = re.exec(process.env.MONGODB_URI)) !== null) {
+    if (m.index === re.lastIndex) {
+      re.lastIndex++;
+    }
+    herokuMongodbServer = { adapter: 'sails-mongo' };
+    herokuMongodbServer.user = m[1];
+    herokuMongodbServer.password = m[2];
+    herokuMongodbServer.host = m[3];
+    herokuMongodbServer.port = m[4];
+    herokuMongodbServer.database = m[5];
+
+    console.log('parts', herokuMongodbServer);
+  }
+}
+
+
 module.exports.connections = {
 
   /***************************************************************************
@@ -71,6 +93,8 @@ module.exports.connections = {
     port: 27017,
     database: 'zhao' //optional
   },
+
+  herokuMongodbServer:  herokuMongodbServer,
 
   /***************************************************************************
   *                                                                          *
