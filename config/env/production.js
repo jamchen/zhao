@@ -23,8 +23,16 @@ module.exports = {
    ***************************************************************************/
 
   models: {
-    connection: modelsConnection
+    connection: modelsConnection,
+    migrate: "alter"
   },
+
+  blueprints: {
+    actions: true,
+    shortcuts: false,
+    rest: false // need policy
+  },
+
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *

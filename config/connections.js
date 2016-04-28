@@ -94,7 +94,7 @@ module.exports.connections = {
     database: 'zhao' //optional
   },
 
-  herokuMongodbServer:  herokuMongodbServer,
+  herokuMongodbServer:  herokuMongodbServer || { adapter: 'sails-mongo' },
 
   /***************************************************************************
   *                                                                          *
