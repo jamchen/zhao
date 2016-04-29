@@ -3,7 +3,7 @@
 <% if (req.user) { %>
 	<h2>Hello <%=req.user.username%></h2>
 	<pre><%=JSON.stringify(req.user,0,4)%></pre>
-	<p><img src="<%=req.user.getGravatarUrl()%>"></p>
+	<p><img src="<%=req.user.getFacebookProfilePicture()%>"></p>
 	<a href="/logout">Logout</a>
 <% } else { %>
 <a href="/auth/facebook">Login</a>
