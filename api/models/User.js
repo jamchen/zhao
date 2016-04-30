@@ -36,6 +36,7 @@ _.merge(exports, {
   },
 
   beforeCreate: function beforeCreate(user, next) {
+    user.profilePicture = _super.attributes.getGravatarUrl(user.email);
     if (_super.beforeCreate) {
       _super.beforeCreate.apply(_super, arguments);
     }
