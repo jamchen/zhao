@@ -1,3 +1,5 @@
+'use strict';
+
 var _super = require('sails-auth/api/models/User');
 
 _.merge(exports, _super);
@@ -28,10 +30,7 @@ _.merge(exports, {
     },
 
     getFacebookProfilePicture: function getFacebookProfilePicture() {
-      var facebookPassport = _.find(this.passports, _.matches({ provider: 'facebook' }));
-      if (facebookPassport && facebookPassport.identifier) {
-        return 'https://graph.facebook.com/v2.6/'+facebookPassport.identifier+'/picture';
-      }    
+      return User._getFacebookProfilePictureUrl(_.find(this.passports, _.matches({ provider: 'facebook' })));
     },
   },
 
@@ -41,5 +40,25 @@ _.merge(exports, {
       _super.beforeCreate.apply(_super, arguments);
     }
   },
+
+  afterConnectToPassport: function afterConnectToPassport(user, passport, next) {
+    sails.log.debug('afterConnectToPassport', user, passport);
+    if ('facebook' === passport.provider) {
+      User.update(
+        {id: user.id}, 
+        {profilePicture: this._getFacebookProfilePictureUrl(passport)}
+      ).exec(function(err, updated) {
+        next(null, user);
+      });
+    } else {
+      next(null, user);
+    }    
+  },
+
+  _getFacebookProfilePictureUrl: function _getFacebookProfilePictureUrl(facebookPassport) {
+    if (facebookPassport && facebookPassport.identifier) {
+      return 'https://graph.facebook.com/v2.6/'+facebookPassport.identifier+'/picture';
+    }
+  }
 
 });
