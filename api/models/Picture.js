@@ -14,12 +14,12 @@ module.exports = {
   	},
   	missingPet: {
   		model: 'missingPet',
-  		via: 'picture',
+  		via: 'pictures',
   		required: true,
   	},
   	uploader: {
   		model: 'user',
-  		via: 'picture',
+  		via: 'pictures',
   		required: true,
   	}
   }

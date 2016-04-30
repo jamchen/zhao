@@ -62,7 +62,7 @@ module.exports = {
 		age: {
 			type: 'integer'
 		},
-		picture: {
+		pictures: {
 			collection: 'Picture',
 			via: 'missingPet'
 		},
@@ -70,10 +70,11 @@ module.exports = {
 			model: 'contactInfo',
 			via: 'missingPet'
 		},
-  	creator: {
-  		model: 'user',
-			required: true
-  	}
+	  	creator: {
+	  		model: 'user',
+	  		required: true,
+	  		via: 'missingPets'
+	  	}
   }
 };
 

@@ -6,18 +6,22 @@ _.merge(exports, {
 
   // Extend with custom logic here by adding additional fields, methods, etc.
   attributes: {
-    missingPet: {
+    missingPets: {
     	collection: 'missingPet',
     	via: 'creator'
     },
-    picture: {
-    	collection: 'picture',
+    pictures: {
+    	collection: 'Picture',
     	via: 'uploader'
     },
     contactInfo: {
 			collection: 'contactInfo',
 			via: 'creator'
 		},
+    profilePicture: {
+      type: 'string',      
+    },
+
     toJSON: function toJSON() {
       sails.log.debug('user.toJSON ');
       var user = _super.attributes.toJSON.apply(this);
