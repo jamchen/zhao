@@ -1,12 +1,5 @@
-<h1>Using Passport With Sails</h1>
-
-<% if (req.user) { %>
-	<h2>Hello <%=req.user.username%></h2>
-	<pre><%=JSON.stringify(req.user,0,4)%></pre>
-	<% if (req.user.profilePicture) { %>
-		<p><img src="<%=req.user.profilePicture%>"></p>
-	<% } %>
-	<a href="/logout">Logout</a>
-<% } else { %>
-<a href="/auth/facebook">Login</a>
-<% } %>
+<div class="center-align">
+	<h2>找回您寵物家人的管道</h2>
+	<p class="flow-text">讓我們一起幫您找回您的寵物家人</p>
+	<a href="missing/post" class="waves-effect waves-light btn-large"><i class="material-icons left">cloud_upload</i>我要刊登協尋啟事</a>
+</div>

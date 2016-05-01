@@ -51,6 +51,10 @@ module.exports.policies = {
   //
   HomeController: {
     'index': ['passport', 'loadPassport']
+  },
+
+  MissingPetController: {
+    'post': ['passport', 'sessionAuth']
   }
  
 };

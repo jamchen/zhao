@@ -1,18 +1,16 @@
 <nav>
 	<div class="nav-wrapper">
-		<a href="#!" class="brand-logo">Logo</a>
-		<a href="#" data-activates="mobile-menu" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
-		<ul class="right hide-on-small-only">
-			<li><a href="sass.html">Sass</a></li>
-			<li><a href="badges.html">Components</a></li>
-			<li><a href="collapsible.html">Javascript</a></li>
-			<li><a href="mobile.html">Mobile</a></li>
-		</ul>
-		<ul class="side-nav" id="mobile-menu">
-			<li><a href="sass.html">Sass</a></li>
-			<li><a href="badges.html">Components</a></li>
-			<li><a href="collapsible.html">Javascript</a></li>
-			<li><a href="mobile.html">Mobile</a></li>
-		</ul>
+		<div class="container">
+			<a href="/" class="brand-logo"><%=sails.config.appName%></a>
+			<% if (req.user) { %>
+				<a href="#" data-activates="mobile-menu" class="button-collapse hide-on-med-and-up"><i class="material-icons">menu</i></a>
+				<ul class="right hide-on-small-only">
+					<li><a href="/logout">登出</a></li>
+				</ul>
+				<ul class="side-nav" id="mobile-menu">
+					<li><a href="/logout">登出</a></li>
+				</ul>
+			<% } %>			
+		</div>
 	</div>
 </nav>
