@@ -29,6 +29,8 @@
 							<div class="info-value">
 								<% if ('missingDate' === infoKey) { %>
 									<%= moment(missingPet[infoKey]).calendar() %>
+								<% } else if ('gender' === infoKey) { %>
+									<%= i18n(missingPet[infoKey]) %>
 								<% } else { %>
 									<%= missingPet[infoKey] %>
 
