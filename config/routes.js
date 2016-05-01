@@ -37,6 +37,7 @@ module.exports.routes = {
   // }
   'get /': 'HomeController.index',
   'get /logout': 'AuthController.logout',
+  'get /missing/post': 'MissingPetController.post'
 
   /***************************************************************************
   *                                                                          *
