@@ -6,6 +6,8 @@
 	"missingDate": "走失時間",
 	"gender": "性別",
 	"breed": "品種",
-	"weight": "體重",
-	"age": "年齡"
+	"weight": "體重（公斤）",
+	"age": "年齡",
+	"male": "公",
+	"female": "母"
 }
