@@ -24,7 +24,7 @@ module.exports.passport = {
     name: 'Facebook',
     protocol: 'oauth2',
     strategy: require('passport-facebook').Strategy,
-    callback: '/auth/facebook/callback?next='+encodeURIComponent('/'),
+    callback: '/auth/facebook/callback',
     options: {
       clientID: 'FACEBOOK_CLIENT_ID',
       clientSecret: 'FACEBOOK_CLIENT_SECRET',
