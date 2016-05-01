@@ -4,8 +4,8 @@
 			<h3><%= missingPet.name %>走丟了，請幫我找找</h3>
 		</div>
 		<div class="col s12 m6 right-align record-info">
-			<p><small>刊登日期：<%= missingPet.createdAt %></small></p>
-			<p><small>最後修改日期：<%= missingPet.updatedAt %></small></p>	
+			<p><small>刊登日期：<%= moment(missingPet.createdAt).calendar() %></small></p>
+			<p><small>最後修改日期：<%= moment(missingPet.updatedAt).calendar() %></small></p>	
 			<p><small>協尋編號：<%= missingPet.id %></small></p>
 		</div>
 	</div>
@@ -27,7 +27,12 @@
 							<strong><%= i18n(infoKey) %></strong>
 							</div>
 							<div class="info-value">
-								<%= missingPet[infoKey] %>
+								<% if ('missingDate' === infoKey) { %>
+									<%= moment(missingPet[infoKey]).calendar() %>
+								<% } else { %>
+									<%= missingPet[infoKey] %>
+
+								<% } %>
 							</div>
 						</div>
 						<%

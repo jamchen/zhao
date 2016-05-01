@@ -5,13 +5,15 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+var moment = require('moment');
+
 module.exports = {
 	post: function(req, res) {
 		return res.view();
 	},
 
 	detail: function(req, res) {
-		sails.log.debug('detail', req.param('id'));
+		moment.locale(req.getLocale());
 		MissingPet.findOne({id: req.param('id')})
 		.exec(function(err, missingPet) {
 			if (err) {
@@ -21,7 +23,8 @@ module.exports = {
 				return res.notFound();				
 			}
 			res.view('missingpet/detail', {
-				missingPet: missingPet
+				missingPet: missingPet,
+				moment: moment
 			});
 		});
 	}
