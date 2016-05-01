@@ -21,4 +21,9 @@ module.exports = {
   //   connection: 'someMongodbServer'
   // }
 
+
+  // turn it off by default to prevent injecting duplicate data. you can turn it back on in local.js
+  seed: {
+    active: false
+  }
 };
