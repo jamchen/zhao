@@ -1,0 +1,23 @@
+.info-header {
+	@extend .col;
+	@extend .s3;
+}
+
+.info-value {
+	@extend .col;
+	@extend .s9;	
+}
+
+.pet-info {
+	.row {
+		margin-bottom: 2px;
+	}
+}
+
+.record-info {
+	margin-top: 20px;
+	p {
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+}
