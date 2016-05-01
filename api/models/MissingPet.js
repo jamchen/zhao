@@ -37,7 +37,7 @@ module.exports = {
             type: 'boolean',
             required: true,
         },
-        hasCollars: {
+        hasCollar: {
             type: 'boolean',
             required: true,
         },
