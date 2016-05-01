@@ -4,4 +4,5 @@ $( document ).ready(function() {
 	$('.datepicker').pickadate({
 	    selectMonths: true, // Creates a dropdown to control month
 	});
+	$('.materialboxed').materialbox();
 })

@@ -42,7 +42,6 @@ _.merge(exports, {
   },
 
   afterConnectToPassport: function afterConnectToPassport(user, passport, next) {
-    sails.log.debug('afterConnectToPassport', user, passport);
     if ('facebook' === passport.provider) {
       User.update(
         {id: user.id}, 

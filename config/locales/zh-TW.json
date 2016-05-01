@@ -1,0 +1,13 @@
+{
+	"name": "名字",
+	"kind": "種類",
+	"color": "花色",
+	"location": "走失地點",
+	"missingDate": "走失時間",
+	"gender": "性別",
+	"breed": "品種",
+	"weight": "體重（公斤）",
+	"age": "年齡",
+	"male": "公",
+	"female": "母"
+}
