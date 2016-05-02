@@ -65,7 +65,7 @@
           </select>
           <label>走失時是否有戴項圈</label>
         </div>
-        <div class="input-field col s12">
+        <div class="input-field col s12 taiwan_village_picker">
           <input placeholder="例：新北市中和區連城路" id="location" type="text" class="validate">
           <label>走失地點</label>
         </div>
@@ -128,3 +128,5 @@
 </div>
 
 <% block('localScriptsAfterCommonScripts', '<script type="text/javascript" src="/js/view_specific/taiwan_village_picker.js"></script>') %>
+
+<% block('localScriptsAfterCommonScripts', '<script type="text/javascript">$(".taiwan_village_picker").taiwan_village_picker();</script>') %>
