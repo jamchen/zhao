@@ -49,7 +49,7 @@ if (typeof(jQuery) === 'undefined') {
 				return parent;
 			} else if (11 === code.length) {
 				var parentCode = code.substring(0, 7);
-				var parent = village_data.level3[parentCode] = village_data.level2[parentCode] || [];
+				var parent = village_data.level3[parentCode] = village_data.level3[parentCode] || [];
 				return parent;
 			} else {
 				console.log('Illeagle code length:', code);
@@ -58,25 +58,15 @@ if (typeof(jQuery) === 'undefined') {
 		var isLeaf = function isLeaf(code) {
 			return 11 === code.length;
 		};
-		var getCodeAndContentFromRow = function getCodeAndContentFromRow(row) {
-			var codeAndContent = {};
-			for (var i = 0; i < row.childElementCount; i++) {
-				var child = row.childNodes[i];
-				if ('Code' === child.tagName) {
-					codeAndContent.code = child.textContent.trim();
-				} else if ('Content' === child.tagName) {
-					codeAndContent.content = child.textContent.trim();
-				}
-			}
-			return codeAndContent;
-		};
 		// 不能用完整樹狀結構，因為不知道為什麼Safari會因此而爆炸慢，只好折衷攤平樹狀結構
 		var village_data = {
 			level1: [],
 			level2: {},
-			level3: {}
+			level3: {},
+			total: 0
 		};
 		$(res).find('Row').each(function(index, el) {
+			village_data.total++;
 			var $el = $(el);
 			var code = $el.find('Code').text().trim();
 			var content = $el.find('Content').text().trim();
@@ -119,12 +109,40 @@ if (typeof(jQuery) === 'undefined') {
 		}
 		return dfd.promise();
 	};
-
+	var selfTest = function selfTest(village_data) {
+		console.log('start self test date: ', village_data);
+		var total = 0;
+		var start = window.performance?window.performance.now():0;
+		$.each(village_data.level1, function(index, level1Obj) {
+			total++;
+			var level2Entry = village_data.level2[level1Obj.code]
+			if (!level2Entry) {
+				console.error('cannot find level2 entry for code', level1Obj.code);
+			} else {
+				$.each(level2Entry, function(index, level2Obj) {
+					total++;
+					var level3Entry = village_data.level3[level2Obj.code];
+					if (!level3Entry) {
+						console.error('cannot find level3 entry for code', level2Obj.code);					 	
+					} else {
+						total += level3Entry.length;
+					}
+				});
+			}
+		});
+		if (window.performance) {
+			console.log('self test spent: '+(window.performance.now()-start));
+		}
+		if (total !== village_data.total) {
+			console.error('item count are mismatched !', total, village_data.total);
+		}
+	};
   $.fn.taiwan_village_picker = function (options) {
   	this.each(function() {
   		var $this = $(this);
   		$.when(loadVillageData(options))
   		.done(function(village_data) {
+  			selfTest(village_data);
 	  		console.log('taiwan_village_pickerlized', village_data, $this);
   		})
   		.fail(function() {
