@@ -28,42 +28,68 @@ if (typeof(jQuery) === 'undefined') {
 		// - level 1: 兩碼或五碼
 		// - level 2: 共七碼
 		// - level 3: 共十碼（包含'-'共十一個字元）
-		var findParentForCode = function findParentForCode(village_data, code) {
-			if (2 === code.length || 5 === code.length) {
-				return village_data;
+		var getParentCode = function getParentCode(parents, code) {
+			var parent = $.grep(parents, function(parent) {
+					return parent.code === code.substring(0, 2) || parent.code === code.substring(0, 5);
+			});
+			if (parent.length === 1) {
+				return parent[0].code;
+			} else {
+				console.log('cannot find parent for code', code, ' in ', parents);
 			}
-			var parentNode = village_data[code.substring(0, 2)] || village_data[code.substring(0, 5)];
+		};
+		var findParentForCode = function findParentForCode(village_data, code) {
+			if (!code) return;
+			if (2 === code.length || 5 === code.length) {
+				return village_data.level1;
+			}
 			if (7 === code.length) {
-				return parentNode?parentNode.children:parentNode;
+				var parentCode = getParentCode(village_data.level1, code);
+				var parent = village_data.level2[parentCode] = village_data.level2[parentCode] || [];
+				return parent;
 			} else if (11 === code.length) {
-				parentNode = parentNode.children[code.substring(0, 7)];
-				return parentNode?parentNode.children:parentNode;
+				var parentCode = code.substring(0, 7);
+				var parent = village_data.level3[parentCode] = village_data.level2[parentCode] || [];
+				return parent;
 			} else {
 				console.log('Illeagle code length:', code);
 			}
 		};
-		var isLeaf = function(code) {
+		var isLeaf = function isLeaf(code) {
 			return 11 === code.length;
 		};
-		var village_data = {};
-		var lastIndex;
+		var getCodeAndContentFromRow = function getCodeAndContentFromRow(row) {
+			var codeAndContent = {};
+			for (var i = 0; i < row.childElementCount; i++) {
+				var child = row.childNodes[i];
+				if ('Code' === child.tagName) {
+					codeAndContent.code = child.textContent.trim();
+				} else if ('Content' === child.tagName) {
+					codeAndContent.content = child.textContent.trim();
+				}
+			}
+			return codeAndContent;
+		};
+		// 不能用完整樹狀結構，因為不知道為什麼Safari會因此而爆炸慢，只好折衷攤平樹狀結構
+		var village_data = {
+			level1: [],
+			level2: {},
+			level3: {}
+		};
 		$(res).find('Row').each(function(index, el) {
 			var $el = $(el);
 			var code = $el.find('Code').text().trim();
 			var content = $el.find('Content').text().trim();
 			var parentNode = findParentForCode(village_data, code);
 			if (parentNode) {
-				parentNode[code] = {
-					code: code, 
-					content: content, 
-					children: isLeaf(code)?undefined:{}
-				};
+				parentNode.push({
+					code: code,
+					content: content
+				});
 			} else {
-				console.log('error: find no parent node for ', code, content);
-			}
-			lastIndex = index;
+				console.log('error: find no parent node for ', codeAndContent);
+			}			
 		});
-		console.log('total row:', lastIndex+1);
 		return village_data;
 	}
 	var loadVillageData = function loadVillageData(options) {
@@ -72,14 +98,19 @@ if (typeof(jQuery) === 'undefined') {
 			dfd.resolve(village_data);
 		} else {
 			$.ajax({
-				url: '/raw/village.xml',
+				url: 'http://www.dgbas.gov.tw/public/data/open/stat/village.xml', //'/raw/village.xml',
 				dataType: 'xml'
 			})
 			.done(function(res) {
-				console.log("success", res);
 				console.log("parsing xml");
-				village_data = parseResponse(res);
-				dfd.resolve(village_data);
+				var start = window.performance?window.performance.now():0;
+				window.setTimeout(function() {
+					village_data = parseResponse(res);
+					if (window.performance) {
+						console.log('parsing spent: '+(window.performance.now()-start));
+					}
+					dfd.resolve(village_data);
+				}, 1);
 			})
 			.fail(function() {
 				dfd.reject.apply(dfd, arguments);
