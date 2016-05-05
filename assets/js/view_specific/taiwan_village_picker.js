@@ -141,11 +141,11 @@ if (typeof(jQuery) === 'undefined') {
 			console.error('item count are mismatched !', total, village_data.total);
 		}
 	};
-	var _createSelectDivWithOptions = function _createSelectDivWithOptions(options, hint, id, clazz) {
+	var _createSelectDivWithOptions = function _createSelectDivWithOptions(options, hint, name, clazz) {
 		var container = $('<div/>', {
 			class: clazz
 		});
-		var select = $('<select/>', {id: id}).appendTo(container);
+		var select = $('<select/>', {name: name}).appendTo(container);
 	  $('<option/>', {
 	  	disabled: '',
 	  	selected: '',
@@ -187,7 +187,7 @@ if (typeof(jQuery) === 'undefined') {
 	  				if ($leve3Selector) {
 	  					$leve3Selector.remove();
 	  				}
-	  				$leve3Selector = _createSelectDivWithOptions(village_data.level3[$(this).val()], '請選擇里', options.id, options.class);
+	  				$leve3Selector = _createSelectDivWithOptions(village_data.level3[$(this).val()], '請選擇里', options.name, options.class);
 	  				$this.append($leve3Selector);
 	  				$('select', $leve3Selector).material_select();
 	  			});
