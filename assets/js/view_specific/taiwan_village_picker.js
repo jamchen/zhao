@@ -82,10 +82,14 @@ if (typeof(jQuery) === 'undefined') {
 		});
 		return village_data;
 	}
+	var loadingDeferred;
 	var loadVillageData = function loadVillageData(options) {
-		var dfd = $.Deferred();
+		if (loadingDeferred) {
+			return loadingDeferred.promise();
+		}
+		loadingDeferred = $.Deferred();
 		if (village_data) {
-			dfd.resolve(village_data);
+			loadingDeferred.resolve(village_data);
 		} else {
 			$.ajax({
 				url: 'http://www.dgbas.gov.tw/public/data/open/stat/village.xml', //'/raw/village.xml',
@@ -99,15 +103,15 @@ if (typeof(jQuery) === 'undefined') {
 					if (window.performance) {
 						console.log('parsing spent: '+(window.performance.now()-start));
 					}
-					dfd.resolve(village_data);
+					loadingDeferred.resolve(village_data);
 				}, 1);
 			})
 			.fail(function() {
-				dfd.reject.apply(dfd, arguments);
+				loadingDeferred.reject.apply(loadingDeferred, arguments);
 			});
 			
 		}
-		return dfd.promise();
+		return loadingDeferred.promise();
 	};
 	var selfTest = function selfTest(village_data) {
 		console.log('start self test date: ', village_data);
@@ -137,6 +141,25 @@ if (typeof(jQuery) === 'undefined') {
 			console.error('item count are mismatched !', total, village_data.total);
 		}
 	};
+	var _createSelectDivWithOptions = function _createSelectDivWithOptions(options, hint, id, clazz) {
+		var container = $('<div/>', {
+			class: clazz
+		});
+		var select = $('<select/>', {id: id}).appendTo(container);
+	  $('<option/>', {
+	  	disabled: '',
+	  	selected: '',
+	  	value: '',
+	  	text: hint
+		}).appendTo(select);
+		$.each(options, function(index, option) {
+		  $('<option/>', {
+		  	value: option.code,
+		  	text: option.content
+			}).appendTo(select);
+		});
+		return container;
+	};
   $.fn.taiwan_village_picker = function (options) {
   	this.each(function() {
   		var $this = $(this);
@@ -144,6 +167,32 @@ if (typeof(jQuery) === 'undefined') {
   		.done(function(village_data) {
   			selfTest(village_data);
 	  		console.log('taiwan_village_pickerlized', village_data, $this);
+	  		$this.empty();
+	  		var $level1Selector = _createSelectDivWithOptions(village_data.level1, '請選擇縣市', undefined, options.class);
+	  		var $leve2Selector;
+	  		var $leve3Selector;
+	  		$this.append($level1Selector);
+	  		$('<label/>', {text: options.label}).appendTo($level1Selector);
+	  		$('select', $level1Selector).change(function(event) {
+	  			if ($leve2Selector) {
+	  				$leve2Selector.remove();
+	  			}
+	  			if ($leve3Selector) {
+	  				$leve3Selector.remove();
+	  			}
+	  			$leve2Selector = _createSelectDivWithOptions(village_data.level2[$(this).val()], '請選擇鄉鎮', undefined, options.class);
+	  			$this.append($leve2Selector);
+	  			$('select', $leve2Selector).material_select();
+	  			$('select', $leve2Selector).change(function(event) {
+	  				if ($leve3Selector) {
+	  					$leve3Selector.remove();
+	  				}
+	  				$leve3Selector = _createSelectDivWithOptions(village_data.level3[$(this).val()], '請選擇里', options.id, options.class);
+	  				$this.append($leve3Selector);
+	  				$('select', $leve3Selector).material_select();
+	  			});
+	  		});
+	  		$('select', $this).material_select();
   		})
   		.fail(function() {
   			console.log("error occurred", arguments);
