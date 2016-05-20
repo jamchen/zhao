@@ -21,6 +21,12 @@ a [Sails](http://sailsjs.org) application
 	gem install sass
 	```
 	
+1. Change to project directory
+
+	```
+	cd zhao/
+	```
+
 1. Install Dependencies (like every nodejs app)
 
 	```
