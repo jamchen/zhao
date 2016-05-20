@@ -3,7 +3,7 @@
 a [Sails](http://sailsjs.org) application
 
 
-#Instructions:
+# Instructions:
 
 1. Install Sails - [Official Document](http://sailsjs.org/get-started)
 
@@ -32,3 +32,9 @@ a [Sails](http://sailsjs.org) application
 	```
 	sails lift
 	```
+# MISC.
+
+## 開發環境設置檔
+開發環境需要簡單的設定，其中包含資料庫，Facebook App Key/Secret，網域等等資訊
+
+簡易檔案範例請參考：[https://github.com/jamchen/zhao/blob/develop/config/README.md](https://github.com/jamchen/zhao/blob/develop/config/README.md)
