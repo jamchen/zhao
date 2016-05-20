@@ -70,4 +70,4 @@ Mac OS X /etc/hosts 範例：
 	fe80::1%lo0	localhost
 
 
-** 注意：hosts 檔內的網域需要跟config/local.js一致 **
+**注意：hosts 檔內的網域需要跟config/local.js一致**
