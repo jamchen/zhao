@@ -36,5 +36,6 @@ a [Sails](http://sailsjs.org) application
 
 ## 開發環境設置檔
 開發環境需要簡單的設定，其中包含資料庫，Facebook App Key/Secret，網域等等資訊
+利用Sails的環境設定機制，我們可以產生一個本地開發用的設定 config/local.js
 
 簡易檔案範例請參考：[https://github.com/jamchen/zhao/blob/develop/config/README.md](https://github.com/jamchen/zhao/blob/develop/config/README.md)
