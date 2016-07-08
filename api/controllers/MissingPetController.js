@@ -27,6 +27,23 @@ module.exports = {
 				moment: moment
 			});
 		});
+	},
+
+	master: function (req, res) {
+		moment.locale(req.getLocale());
+		MissingPet.find()
+		.exec(function(err, missingPets) {
+			if (err) {
+				return res.serverError(err);
+			}
+			if (!missingPets) {
+				return res.notFound();				
+			}
+			res.view('missingpet/master', {
+				missingPets: missingPets,
+				moment: moment
+			});
+		});
 	}
 };
 
