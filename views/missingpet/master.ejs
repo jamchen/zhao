@@ -1,5 +1,120 @@
+
+<!-- Option 1 -->
+
+<% /* for(i = 0; i < missingPets.length; i++) { %>
+	<div class="container">
+		<div class="row card-panel teal lighten-2">
+			<div class="col m12 s12">
+				<img class="col m5 s12 responsive-img master-picture" src="http://placehold.it/640x480"> <!-- <%= missingPets[i].mainPictureUrl%> -->
+				<div class="col m3 s12 column1">
+					<p class="master-name">
+						名稱：<%= missingPets[i].name %>
+					</p>
+					<p class="master-kind">
+						類別：<%= missingPets[i].kind %>
+					</p>
+					<p class="master-breed">
+						品種：<%= missingPets[i].breed %>
+					</p>
+					<p class="master-color">
+						花色：<%= missingPets[i].color %>
+					</p>
+				</div>
+				<div class="col m4 s12 column2">
+					<p class="master-location">
+						走失地點：<%= missingPets[i].location %>
+					</p>
+					<p class="master-missingDate">
+						走失日期：<%= missingPets[i].missingDate %>
+					</p>					
+				</div>
+				<div class="col s12">
+					<p class="master-description">
+					描述：<%= missingPets[i].description %>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+<% } */%>
+
+
+
+<!-- Option 2 -->
+
+<div class="row">
+	<% for(i = 0; i < missingPets.length; i++) { %>
+		<div class="col s12 m6 card">
+			<div class="card-image waves-effect waves-block waves-light">
+				<img class="activator master-picture" src="http://placehold.it/640x480"> <!-- <%= missingPets[i].mainPictureUrl%> -->
+			</div>
+			<div class="card-content">
+				<div class="card-top col s12">
+					<span class="card-title activator master-name">
+						名稱：<%= missingPets[i].name %>
+						<i class="material-icons right">more_vert</i>
+					</span>
+				</div>
+				<div class="col s5 column1">
+					<p class="master-kind">
+						類別：<%= missingPets[i].kind %>
+					</p>
+					<p class="master-breed">
+						品種：<%= missingPets[i].breed %>
+					</p>
+					<p class="master-color">
+						花色：<%= missingPets[i].color %>
+					</p>
+					<p class="master-gender">
+						性別：<%= missingPets[i].gender %>
+					</p>
+				</div>
+				<div class="col s7 column2">
+					<p class="master-location">
+						走失地點：<%= missingPets[i].location %>
+					</p>
+					<p class="master-missingDate">
+						走失日期：<%= missingPets[i].missingDate %>
+					</p>
+					<br>			
+				</div>
+			</div>
+			<div class="card-reveal">
+				<span class="card-title activator master-name">
+					<%= missingPets[i].name %>
+					<i class="material-icons right">close</i>
+				</span>
+				<div class="reveal-left col s6">
+					<p class="master-age">
+					年齡：<%= missingPets[i].age %>
+					</p>
+					<p class="master-weight">
+					體重：<%= missingPets[i].weight %>
+					</p>
+					<p class="master-neuter">
+					結紮：<%= missingPets[i].neuter %>
+					</p>
+				</div>
+				<div class="reveal-right col s6">
+					<p class="master-hasCollar">
+					項圈：<%= missingPets[i].hasCollar %>
+					</p>
+					<p class="master-hasMicrochip">
+					晶片：<%= missingPets[i].hasMicrochip %>
+					</p>
+				</div>
+				<p class="master-description left">
+				描述：<%= missingPets[i].description %>
+				</p>
+			</div>
+		</div>
+	<% } %>
+</div>
+
+
 <pre>
 <%= 
 JSON.stringify(missingPets, 0, 4)
 %>
 </pre>
+
