@@ -47,15 +47,19 @@
 		<div class="col s12 m6 card">
 			<div class="card-image waves-effect waves-block waves-light">
 				<img class="activator master-picture" src="http://placehold.it/640x480"> <!-- <%= missingPets[i].mainPictureUrl%> -->
+				<span class="card-title activator master-name col s12 grey image-title">
+					名稱：<%= missingPets[i].name %>
+					<i class="material-icons right">more_vert</i>
+				</span>
 			</div>
-			<div class="card-content">
-				<div class="card-top col s12">
-					<span class="card-title activator master-name">
+			<div class="card-content flow-text">
+				<!-- <div class="card-top">
+					<span class="card-title activator master-name grey">
 						名稱：<%= missingPets[i].name %>
 						<i class="material-icons right">more_vert</i>
 					</span>
-				</div>
-				<div class="col s5 column1">
+				</div> -->
+				<div class="col s5 column1 truncate">
 					<p class="master-kind">
 						類別：<%= missingPets[i].kind %>
 					</p>
@@ -66,45 +70,78 @@
 						花色：<%= missingPets[i].color %>
 					</p>
 					<p class="master-gender">
-						性別：<%= missingPets[i].gender %>
+						<% var petGender = missingPets[i].gender %>
+						<% if(petGender == 'male') { %>
+							<% petGender = '公' %>
+						<% } else if(petGender == 'female') { %>
+							<% petGender = '母' %>
+						<% } %>
+						性別：<%= petGender %>
 					</p>
+					<br>
 				</div>
 				<div class="col s7 column2">
 					<p class="master-location">
 						走失地點：<%= missingPets[i].location %>
 					</p>
 					<p class="master-missingDate">
-						走失日期：<%= missingPets[i].missingDate %>
-					</p>
-					<br>			
+						<% var date = missingPets[i].missingDate %>
+						走失日期：<%= moment(date).format('L') %>
+					</p>			
 				</div>
 			</div>
-			<div class="card-reveal">
+			<div class="card-reveal flow-text">
 				<span class="card-title activator master-name">
 					<%= missingPets[i].name %>
 					<i class="material-icons right">close</i>
 				</span>
 				<div class="reveal-left col s6">
+					<p class="master-kind">
+						類別：<%= missingPets[i].kind %>
+					</p>
+					<p class="master-breed">
+						品種：<%= missingPets[i].breed %>
+					</p>
+					<p class="master-color">
+						花色：<%= missingPets[i].color %>
+					</p>
 					<p class="master-age">
-					年齡：<%= missingPets[i].age %>
-					</p>
-					<p class="master-weight">
-					體重：<%= missingPets[i].weight %>
-					</p>
-					<p class="master-neuter">
-					結紮：<%= missingPets[i].neuter %>
+						年齡：<%= missingPets[i].age %> 歲
 					</p>
 				</div>
 				<div class="reveal-right col s6">
+					<p class="master-neuter">
+						<% if(missingPets[i].neuter == true) { %>
+							<% var petNeuter = '有' %>
+						<% } else if(missingPets[i].neuter == false) { %>
+							<% var petNeuter = '無' %>
+						<% } %>
+						結紮：<%= petNeuter %>
+					</p>
 					<p class="master-hasCollar">
-					項圈：<%= missingPets[i].hasCollar %>
+						<% if(missingPets[i].hasCollar == true) { %>
+							<% var petCollar = '有' %>
+						<% } else if(missingPets[i].hasCollar == false) { %>
+							<% var petCollar = '無' %>
+						<% } %>
+						項圈：<%= petCollar %>
 					</p>
 					<p class="master-hasMicrochip">
-					晶片：<%= missingPets[i].hasMicrochip %>
+						<% if(missingPets[i].hasMicrochip == true) { %>
+							<% var petMicrochip = '有' %>
+						<% } else if(missingPets[i].hasMicrochip == false) { %>
+							<% var petMicrochip = '無' %>
+						<% } else { %>
+							<% $('.master-hasMicrochip').hide() %>
+						<% } %>
+						晶片：<%= petMicrochip %>
+					</p>
+					<p class="master-weight">
+						體重：<%= missingPets[i].weight %> kg
 					</p>
 				</div>
 				<p class="master-description left">
-				描述：<%= missingPets[i].description %>
+					描述：<%= missingPets[i].description %>
 				</p>
 			</div>
 		</div>
