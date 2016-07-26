@@ -42,7 +42,7 @@
 
 <!-- Option 2 -->
 
-<div class="row">
+<div id="row" class="row">
 	<% for(i = 0; i < missingPets.length; i++) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
@@ -79,7 +79,7 @@
 							<% } %>
 							性別：<%= petGender %>
 						</p>
-						<br>
+						
 					</div>
 					<div class="col s7 column2">
 						<p class="master-location">
@@ -146,7 +146,19 @@
 			</div>
 		</div>
 	<% } %>
+	<div class = "col s12 m12 center-align">
+		<ul class="pagination">
+		    <li id="pagePrevious" class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+		    <li id="page1" class="active page" onclick="buildMasterPage(1)"><a href="#!">1</a></li>
+		    <li id="page2" class="waves-effect page" onclick="buildMasterPage(2)"><a href="#!">2</a></li>
+		    <li id="page3" class="waves-effect page" onclick="buildMasterPage(3)"><a href="#!">3</a></li>
+		    <li id="page4" class="waves-effect page" onclick="buildMasterPage(4)"><a href="#!">4</a></li>
+		    <li id="page5" class="waves-effect page" onclick="buildMasterPage(5)"><a href="#!">5</a></li>
+		    <li id="pageNext" class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+	  	</ul>
+	</div>
 </div>
+
 
 
 <pre>
