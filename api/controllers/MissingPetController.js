@@ -44,6 +44,19 @@ module.exports = {
         });
     },
 
+    _getTotalCountAsync: function() {
+    	return new Promise(function(fulfill, reject) {
+            MissingPet.count()
+                .exec(function(err, total) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        fulfill(total);
+                    }
+                });
+        });
+    },
+
     master: function(req, res) {
         var missingPetController = this;
         var criteria = {
@@ -59,13 +72,15 @@ module.exports = {
 
         co(function*() {
             var queryDB = yield {
-            	missingPets: missingPetController._getMissingPetsAsync(criteria)
+            	missingPets: missingPetController._getMissingPetsAsync(criteria),
+            	total: missingPetController._getTotalCountAsync()
             };
             if (!queryDB.missingPets) {
             	return res.notFound();
             }
             res.view('missingpet/master', {
             	missingPets: queryDB.missingPets,
+            	total: queryDB.total,
             	moment: moment
             });            
         }).catch(function(err) {
