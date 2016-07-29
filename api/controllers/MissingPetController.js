@@ -6,6 +6,7 @@
  */
 
 var moment = require('moment');
+var _ = require('lodash');
 
 module.exports = {
 	post: function(req, res) {
@@ -30,8 +31,17 @@ module.exports = {
 	},
 
 	master: function (req, res) {
+		var criteria = {
+			skip: 0,
+			limit: 10,
+			sort: 'updatedAt DESC'
+		};
+		_.assign(criteria, {
+			skip: req.param('offset')||criteria.skip,
+			limit: req.param('limit')||criteria.limit,
+		});
 		moment.locale(req.getLocale());
-		MissingPet.find()
+		MissingPet.find(criteria)
 		.exec(function(err, missingPets) {
 			if (err) {
 				return res.serverError(err);
