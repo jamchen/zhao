@@ -68,6 +68,7 @@ module.exports = {
             skip: req.param('offset') || criteria.skip,
             limit: req.param('limit') || criteria.limit,
         });
+        criteria.limit = Math.min(criteria.limit, 24);
         moment.locale(req.getLocale());
 
         co(function*() {
