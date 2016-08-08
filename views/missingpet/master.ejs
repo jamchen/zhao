@@ -1,65 +1,23 @@
 
-<!-- Option 1 -->
-
-<% /* for(i = 0; i < missingPets.length; i++) { %>
-	<div class="container">
-		<div class="row card-panel teal lighten-2">
-			<div class="col m12 s12">
-				<img class="col m5 s12 responsive-img master-picture" src="http://placehold.it/640x480"> <!-- <%= missingPets[i].mainPictureUrl%> -->
-				<div class="col m3 s12 column1">
-					<p class="master-name">
-						名稱：<%= missingPets[i].name %>
-					</p>
-					<p class="master-kind">
-						類別：<%= missingPets[i].kind %>
-					</p>
-					<p class="master-breed">
-						品種：<%= missingPets[i].breed %>
-					</p>
-					<p class="master-color">
-						花色：<%= missingPets[i].color %>
-					</p>
-				</div>
-				<div class="col m4 s12 column2">
-					<p class="master-location">
-						走失地點：<%= missingPets[i].location %>
-					</p>
-					<p class="master-missingDate">
-						走失日期：<%= missingPets[i].missingDate %>
-					</p>					
-				</div>
-				<div class="col s12">
-					<p class="master-description">
-					描述：<%= missingPets[i].description %>
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-<% } */%>
-
-
-
 <!-- Option 2 -->
 
 <div id="row" class="row">
-	<% for(i = 0; i < missingPets.length; i++) { %>
+	<% for(i = 9; i > -1; i--) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
+			<a target="_blank" href="http://zhaodao.herokuapp.com:1337/missingPet/detail/<%= missingPets[i].id %>">
 				<div class="card-image waves-effect waves-block waves-light">
-					<img class="activator master-picture" src="http://placehold.it/640x480"> <!-- <%= missingPets[i].mainPictureUrl%> -->
+					<div id="mainPicture <%= i %>">
+						<div class="loader" id="loader<%= i %>"></div>
+					 	<img class="activator master-picture<%= i %> " src="<%= missingPets[i].mainPictureUrl %>" onload="imgOnload(<%= i %>)">
+					</div>
 					<span class="card-title activator master-name col s12 grey image-title">
 						名稱：<%= missingPets[i].name %>
 						<i class="material-icons right">more_vert</i>
 					</span>
 				</div>
+			</a>
 				<div class="card-content flow-text">
-					<!-- <div class="card-top">
-						<span class="card-title activator master-name grey">
-							名稱：<%= missingPets[i].name %>
-							<i class="material-icons right">more_vert</i>
-						</span>
-					</div> -->
 					<div class="col s5 column1 truncate">
 						<p class="master-kind">
 							類別：<%= missingPets[i].kind %>
@@ -82,16 +40,24 @@
 						
 					</div>
 					<div class="col s7 column2">
-						<p class="master-location">
+						<p class="master-location truncate">
 							走失地點：<%= missingPets[i].location %>
 						</p>
 						<p class="master-missingDate">
 							<% var date = missingPets[i].missingDate %>
 							走失日期：<%= moment(date).format('L') %>
-						</p>			
+						</p>
+						<p class="master-mostDistantFuture">
+							<% var createdDate = missingPets[i].createdAt %>
+							<% var updatedDate = missingPets[i].updatedAt %>
+							<% var mostDistantFuture = moment().max(createdDate, updatedDate) %>
+							更新日期：<%= moment(mostDistantFuture).format('L') %>
+						</p>
 					</div>
 				</div>
-				<div class="card-reveal flow-text">
+
+<!-------------------------------- 改成 to detail page 以下刪除   -------------------------------->
+				<!-- <div class="card-reveal flow-text">
 					<span class="card-title activator master-name">
 						<%= missingPets[i].name %>
 						<i class="material-icons right">close</i>
@@ -142,30 +108,61 @@
 					<p class="master-description left">
 						描述：<%= missingPets[i].description %>
 					</p>
-				</div>
+				</div> -->
+<!---------------------------------  以上刪除  ---------------------------------->
 			</div>
 		</div>
 	<% } %>
+
 	<div class = "col s12 m12 center-align">
 		<ul class="pagination">
-		    <li id="pagePrevious" class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-		    <li id="page1" class="active page" onclick="buildMasterPage(1)"><a href="#!">1</a></li>
-		    <li id="page2" class="waves-effect page" onclick="buildMasterPage(2)"><a href="#!">2</a></li>
-		    <li id="page3" class="waves-effect page" onclick="buildMasterPage(3)"><a href="#!">3</a></li>
-		    <li id="page4" class="waves-effect page" onclick="buildMasterPage(4)"><a href="#!">4</a></li>
-		    <li id="page5" class="waves-effect page" onclick="buildMasterPage(5)"><a href="#!">5</a></li>
-		    <li id="pageNext" class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+			<%// if(window.location.href == 'http://zhaodao.herokuapp.com:1337/missingPet/master') { %>
+				<li id="pagePrevious" class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				<% var totalPage = Math.ceil(total/10) %>
+				<% var offsetJ = totalPage * 10 %>
+				<% for( j = 0; j < totalPage; j++) { %>
+					<% offsetJ -= 10; %> 
+					<% if(j === 0) { %>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="#!"><%= j+1 %></a></li>
+					<% } else { %>
+						<li id="page<%= j+1 %>" class="page waves-effect"><a href="http://zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetJ %>"><%= j+1 %></a></li>
+					<% } %>
+					
+				<% } %>
+				<li id="pageNext" class="waves-effect"><a href="http://zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= ((totalPage * 10) - 10) %>"><i class="material-icons">chevron_right</i></a></li>
+			<%// } %>
 	  	</ul>
 	</div>
 </div>
 
 
+<!------------ JavaSctipt --------------->
+<script type="text/javascript">
+	
+	$('.master-picture').hide;
+	
+	function imgOnload(number) {
+  		$('#loader' + number).removeClass('loader');
+  		$('.master-picture' + number).show;
+  	}
+
+  	function buildPagination (totalPage, offsetJ) {
+
+		$('.pagination').html(window.location.href);
+  	}
+  	
+
+
+
+</script>
+
+
 
 <br>
+<%= Math.ceil(total/10) %>
 資料總數：<%=total%>
 <pre>
 <%= 
 JSON.stringify(missingPets, 0, 4)
 %>
 </pre>
-
