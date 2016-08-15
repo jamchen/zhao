@@ -2,14 +2,14 @@
 <!-- Option 2 -->
 
 <div id="row" class="row">
-	<% for(i = 9; i > -1; i--) { %>
+	<% for(i = 0; i < 10; i++) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
-			<a target="_blank" href="http://zhaodao.herokuapp.com:1337/missingPet/detail/<%= missingPets[i].id %>">
+			<a target="_blank" href="http://local-zhaodao.herokuapp.com:1337/missingPet/detail/<%= missingPets[i].id %>">
 				<div class="card-image waves-effect waves-block waves-light">
 					<div id="mainPicture <%= i %>">
-						<div class="loader" id="loader<%= i %>"></div>
-					 	<img class="activator master-picture<%= i %> " src="<%= missingPets[i].mainPictureUrl %>" onload="imgOnload(<%= i %>)">
+						<div id="loader<%= i %>" class="loader"></div>
+					 	<img id="master-picture<%= i %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
 					</div>
 					<span class="card-title activator master-name col s12 grey image-title">
 						名稱：<%= missingPets[i].name %>
@@ -55,114 +55,84 @@
 						</p>
 					</div>
 				</div>
-
-<!-------------------------------- 改成 to detail page 以下刪除   -------------------------------->
-				<!-- <div class="card-reveal flow-text">
-					<span class="card-title activator master-name">
-						<%= missingPets[i].name %>
-						<i class="material-icons right">close</i>
-					</span>
-					<div class="reveal-left col s6">
-						<p class="master-kind">
-							類別：<%= missingPets[i].kind %>
-						</p>
-						<p class="master-breed">
-							品種：<%= missingPets[i].breed %>
-						</p>
-						<p class="master-color">
-							花色：<%= missingPets[i].color %>
-						</p>
-						<p class="master-age">
-							年齡：<%= missingPets[i].age %> 歲
-						</p>
-					</div>
-					<div class="reveal-right col s6">
-						<p class="master-neuter">
-							<% if(missingPets[i].neuter == true) { %>
-								<% var petNeuter = '有' %>
-							<% } else if(missingPets[i].neuter == false) { %>
-								<% var petNeuter = '無' %>
-							<% } %>
-							結紮：<%= petNeuter %>
-						</p>
-						<p class="master-hasCollar">
-							<% if(missingPets[i].hasCollar == true) { %>
-								<% var petCollar = '有' %>
-							<% } else if(missingPets[i].hasCollar == false) { %>
-								<% var petCollar = '無' %>
-							<% } %>
-							項圈：<%= petCollar %>
-						</p>
-						<p class="master-hasMicrochip">
-							<% if(missingPets[i].hasMicrochip == true) { %>
-								<% var petMicrochip = '有' %>
-							<% } else if(missingPets[i].hasMicrochip == false) { %>
-								<% var petMicrochip = '無' %>
-							<% } %>
-							晶片：<%= petMicrochip %>
-						</p>
-						<p class="master-weight">
-							體重：<%= missingPets[i].weight %> kg
-						</p>
-					</div>
-					<p class="master-description left">
-						描述：<%= missingPets[i].description %>
-					</p>
-				</div> -->
-<!---------------------------------  以上刪除  ---------------------------------->
 			</div>
 		</div>
 	<% } %>
 
 	<div class = "col s12 m12 center-align">
 		<ul class="pagination">
-			<%// if(window.location.href == 'http://zhaodao.herokuapp.com:1337/missingPet/master') { %>
-				<li id="pagePrevious" class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-				<% var totalPage = Math.ceil(total/10) %>
-				<% var offsetJ = totalPage * 10 %>
-				<% for( j = 0; j < totalPage; j++) { %>
-					<% offsetJ -= 10; %> 
-					<% if(j === 0) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="#!"><%= j+1 %></a></li>
-					<% } else { %>
-						<li id="page<%= j+1 %>" class="page waves-effect"><a href="http://zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetJ %>"><%= j+1 %></a></li>
+			<% var totalPage = Math.ceil(total/10) %>
+			<% var offsetPage = 0 %>
+
+			<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
+			<% if(Number(offset) <= 0) { %>
+				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
+			<% } else { %>
+				<li id="pagePrevious" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
+			<% } %>
+
+			<!---------------------- create pagination by total  ----------------------> 
+			<% for( j = 0; j < totalPage; j++) { %>
+					<% if(Number(offset) === offsetPage) { %>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+					<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+					<% } else {%>
+						<li id="page<%= j+1 %>" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
 					<% } %>
-					
+					<% offsetPage += 10; %>
+			<% } %>
+
+			<!---------------------- create chevron_right icon ---------------------->
+			<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
+				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
+			<% } else { %>
+				<% if (Number(offset) < 0) { %>
+					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
+				<% } else { %>
+					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
-				<li id="pageNext" class="waves-effect"><a href="http://zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= ((totalPage * 10) - 10) %>"><i class="material-icons">chevron_right</i></a></li>
-			<%// } %>
+			<% } %>			
 	  	</ul>
 	</div>
 </div>
 
+<br>
+<%= Math.ceil(total/10) %>
+資料總數：<%=total%>
+
+<pre>
+offset = <%= offset %>
+limit = <%= limit %>
+type of offset = <%= typeof offset %>
+<%= JSON.stringify(missingPets, 0, 4) %>
+</pre>
 
 <!------------ JavaSctipt --------------->
 <script type="text/javascript">
-	
-	$('.master-picture').hide;
-	
-	function imgOnload(number) {
-  		$('#loader' + number).removeClass('loader');
-  		$('.master-picture' + number).show;
-  	}
 
-  	function buildPagination (totalPage, offsetJ) {
+	document.addEventListener("DOMContentLoaded",  function() {
+		
+		for (i = 0; i < 10; i++) {
+			checkImgStatus(i)
+		}
 
-		$('.pagination').html(window.location.href);
-  	}
-  	
-
-
-
+		function checkImgStatus(i) {
+			if(document.getElementById('master-picture' + i).complete){
+				$('#loader' + i).hide();
+				
+			} else {
+				window.setTimeout(function() {
+					checkImgStatus(i)
+				}, 100);
+			}
+		}
+		
+	}); //end of DOMcontentLoaded
 </script>
 
 
 
-<br>
-<%= Math.ceil(total/10) %>
-資料總數：<%=total%>
-<pre>
-<%= 
-JSON.stringify(missingPets, 0, 4)
-%>
-</pre>
+
+
+
