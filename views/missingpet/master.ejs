@@ -2,10 +2,10 @@
 <!-- Option 2 -->
 
 <div id="row" class="row">
-	<% for(i = 0; i < 10; i++) { %>
+	<% for(i = 0; i < missingPets.length; i++) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
-			<a target="_blank" href="http://local-zhaodao.herokuapp.com:1337/missingPet/detail/<%= missingPets[i].id %>">
+			<a target="_blank" href="/missingPet/detail/<%= missingPets[i].id %>">
 				<div class="card-image waves-effect waves-block waves-light">
 					<div id="mainPicture <%= i %>">
 						<div id="loader<%= i %>" class="loader"></div>
@@ -68,17 +68,17 @@
 			<% if(Number(offset) <= 0) { %>
 				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
 			<% } else { %>
-				<li id="pagePrevious" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
+				<li id="pagePrevious" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
 			<% } %>
 
 			<!---------------------- create pagination by total  ----------------------> 
 			<% for( j = 0; j < totalPage; j++) { %>
 					<% if(Number(offset) === offsetPage) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
 					<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
 					<% } else {%>
-						<li id="page<%= j+1 %>" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
 					<% } %>
 					<% offsetPage += 10; %>
 			<% } %>
@@ -88,9 +88,9 @@
 				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
 			<% } else { %>
 				<% if (Number(offset) < 0) { %>
-					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
+					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } else { %>
-					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
+					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			<% } %>			
 	  	</ul>
@@ -100,6 +100,7 @@
 <br>
 <%= Math.ceil(total/10) %>
 資料總數：<%=total%>
+<%= missingPets.length %>
 
 <pre>
 offset = <%= offset %>
@@ -117,15 +118,11 @@ type of offset = <%= typeof offset %>
 			checkImgStatus(i)
 		}
 
+
 		function checkImgStatus(i) {
-			if(document.getElementById('master-picture' + i).complete){
-				$('#loader' + i).hide();
-				
-			} else {
-				window.setTimeout(function() {
-					checkImgStatus(i)
-				}, 100);
-			}
+			$('#master-picture' + i).load(function() {
+				$('#loader' + i).fadeOut();
+			});
 		}
 		
 	}); //end of DOMcontentLoaded
