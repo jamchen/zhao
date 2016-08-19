@@ -88,9 +88,9 @@
 				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
 			<% } else { %>
 				<% if (Number(offset) < 0) { %>
-					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
+					<li id="pageNext" class="page waves-effect"><a href="?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } else { %>
-					<li id="pageNext" class="page waves-effect"><a href="http://local-zhaodao.herokuapp.com:1337/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
+					<li id="pageNext" class="page waves-effect"><a href="?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
 			<% } %>			
 	  	</ul>
