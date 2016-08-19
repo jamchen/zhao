@@ -2,7 +2,7 @@
 <!-- Option 2 -->
 
 <div id="row" class="row">
-	<% for(i = 0; i < 10; i++) { %>
+	<% for(i = 0; i < Math.min(limit, missingPets.length); i++) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
 			<a target="_blank" href="http://local-zhaodao.herokuapp.com:1337/missingPet/detail/<%= missingPets[i].id %>">
