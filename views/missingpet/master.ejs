@@ -5,18 +5,19 @@
 	<% for(i = 0; i < missingPets.length; i++) { %>
 		<div class="col s12 m6">
 			<div class="col m12 s12 card">
-			<a target="_blank" href="/missingPet/detail/<%= missingPets[i].id %>">
-				<div class="card-image waves-effect waves-block waves-light">
-					<div id="mainPicture <%= i %>">
-						<div id="loader<%= i %>" class="loader"></div>
-					 	<img id="master-picture<%= i %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
+				<a target="_blank" href="/missingPet/detail/<%= missingPets[i].id %>">
+					<div class="card-image waves-effect waves-block waves-light">
+						<div id="mainPicture <%= i %>">
+							<div id="loader<%= i %>" class="loader">
+						 	<img id="master-picture<%= i %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
+						 	</div>
+						</div>
+						<span class="card-title activator master-name col s12 grey image-title">
+							名稱：<%= missingPets[i].name %>
+							<i class="material-icons right">more_vert</i>
+						</span>
 					</div>
-					<span class="card-title activator master-name col s12 grey image-title">
-						名稱：<%= missingPets[i].name %>
-						<i class="material-icons right">more_vert</i>
-					</span>
-				</div>
-			</a>
+				</a>
 				<div class="card-content flow-text">
 					<div class="col s5 column1 truncate">
 						<p class="master-kind">
@@ -113,15 +114,18 @@ type of offset = <%= typeof offset %>
 <script type="text/javascript">
 
 	document.addEventListener("DOMContentLoaded",  function() {
+
 		
 		for (i = 0; i < 10; i++) {
-			checkImgStatus(i)
+			$('#master-picture' + i).hide();
+			checkImgStatus(i);
 		}
 
 
 		function checkImgStatus(i) {
 			$('#master-picture' + i).load(function() {
-				$('#loader' + i).fadeOut();
+				$('#master-picture' + i).show();
+				$('#loader' + i).removeClass('loader');
 			});
 		}
 		
