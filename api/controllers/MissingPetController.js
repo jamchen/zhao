@@ -82,7 +82,9 @@ module.exports = {
             res.view('missingpet/master', {
             	missingPets: queryDB.missingPets,
             	total: queryDB.total,
-            	moment: moment
+            	moment: moment,
+                limit: criteria.limit,
+                offset: criteria.skip
             });            
         }).catch(function(err) {
             res.serverError(err);
