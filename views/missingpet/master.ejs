@@ -1,6 +1,4 @@
 
-<!-- Option 2 -->
-
 <div id="row" class="row">
 	<% for(i = 0; i < missingPets.length; i++) { %>
 		<div class="col s12 m6">
@@ -66,14 +64,19 @@
 			<% var offsetPage = 0 %>
 
 			<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
-			<% if(Number(offset) <= 0) { %>
+			<!---- <% if(Number(offset) <= 0) { %>
 				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
 			<% } else { %>
 				<li id="pagePrevious" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
+			<% } %>  ---->
+			<% if(Number(offset) <= 0) { %>
+				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
+			<% } else { %>
+				<li id="pagePrevious" class="page waves-effect"><i class="material-icons">chevron_left</i></a></li>
 			<% } %>
 
 			<!---------------------- create pagination by total  ----------------------> 
-			<% for( j = 0; j < totalPage; j++) { %>
+			<% for(var j = 0; j < totalPage; j++) { %>
 					<% if(Number(offset) === offsetPage) { %>
 						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
 					<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
@@ -84,6 +87,8 @@
 					<% offsetPage += 10; %>
 			<% } %>
 
+			
+
 			<!---------------------- create chevron_right icon ---------------------->
 			<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
 				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
@@ -93,42 +98,171 @@
 				<% } else { %>
 					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } %>
-			<% } %>			
+			<% } %>	
 	  	</ul>
 	</div>
 </div>
 
+
+<p id="test" color="red"></p>
+
+<br>
+<%= req.getLocale() %>
 <br>
 <%= Math.ceil(total/10) %>
+<br>
 資料總數：<%=total%>
+<br>
 <%= missingPets.length %>
 
 <pre>
+
 offset = <%= offset %>
 limit = <%= limit %>
 type of offset = <%= typeof offset %>
 <%= JSON.stringify(missingPets, 0, 4) %>
 </pre>
 
+
+
 <!------------ JavaSctipt --------------->
 <script type="text/javascript">
 
 	document.addEventListener("DOMContentLoaded",  function() {
 
-		
-		for (i = 0; i < 10; i++) {
-			$('#master-picture' + i).hide();
-			checkImgStatus(i);
+		var offset = <%- offset %>;
+		console.log(offset);
+		var limit = <%- limit %>;
+		console.log(limit);
+		//function for hide spinner when img onload	
+		hideSpinner();
+		function hideSpinner() {
+			for (var k = 0; k < 10; k++) {
+				$('#master-picture' + k).hide();
+				checkImgStatus(k);
+			}
 		}
 
-
-		function checkImgStatus(i) {
-			$('#master-picture' + i).load(function() {
-				$('#master-picture' + i).show();
-				$('#loader' + i).removeClass('loader');
+		function checkImgStatus(num) {
+			$('#master-picture' + num).load(function() {
+				$('#master-picture' + num).show();
+				$('#loader' + num).removeClass('loader');
 			});
 		}
+
+		//get locale info for moment
+
+		//var locale = moment().locale(getLocale());
+		//var localLocale = moment();
+
+		//localLocale.locale(getLocale());
+		//console.log(localLocale.locale)
+		//moment.locale('zh-TW');
+		//moment.locale('fr')
+		moment.locale(getLocale());
+		//console.log(getLocale());
+		//console.log(moment);
+		//console.log(moment.locale());
 		
+
+
+
+		//AJAX for pagePrevious
+		document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
+
+		function toPreviousPage() {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+      				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
+      				//document.getElementById("row").innerHTML = JSON.parse(this.responseText);
+      				//var missingPets = JSON.parse(this.responseText);
+      				hideSpinner();
+      				console.log(offset);
+   				}
+  			};
+  			xhttp.open("GET", "/missingPet?limit=10&skip=0&sort=updatedAt%20DESC", true);
+  			xhttp.send()
+		}
+
+
+		
+
+		function createNewCardByAjax(missingPets) {
+			var cardHtml = '';
+			for(var j = 0; j < missingPets.length; j++) {
+				cardHtml += '<div class="col s12 m6">';
+					cardHtml += '<div class="col m12 s12 card">';
+						cardHtml += '<a target="_blank" href="/missingPet/detail/' + missingPets[j].id + ' ">';
+							cardHtml += '<div class="card-image waves-effect waves-block waves-light">';
+								cardHtml += '<div id="mainPicture' + j + '">';
+									cardHtml += '<div id="loader' + j + '" class="loader">';
+								 	cardHtml += '<img id="master-picture' + j + '" class="activator master-picture" src="' + missingPets[j].mainPictureUrl + '">';
+								 	cardHtml += '</div>';
+								cardHtml += '</div>';
+								cardHtml += '<span class="card-title activator master-name col s12 grey image-title">';
+									cardHtml += '名稱：'+ missingPets[j].name;
+									cardHtml += '<i class="material-icons right">more_vert</i>';
+								cardHtml += '</span>';
+							cardHtml += '</div>';
+						cardHtml += '</a>';
+
+						
+						cardHtml += '<div class="card-content flow-text">';
+							cardHtml += '<div class="col s5 column1 truncate">';
+								cardHtml += '<p class="master-kind">';
+									cardHtml += '類別：' + missingPets[j].kind;
+								cardHtml += '</p>';
+								cardHtml += '<p class="master-breed">';
+									cardHtml += '品種：' + missingPets[j].breed;
+								cardHtml += '</p>';
+								cardHtml += '<p class="master-color">';
+									cardHtml += '花色：' + missingPets[j].color;
+								cardHtml += '</p>';
+								cardHtml += '<p class="master-gender">';
+									var petGender = missingPets[j].gender
+									if(petGender == 'male') {
+										petGender = '公'
+									} else if(petGender == 'female') {
+										petGender = '母'
+									}
+									cardHtml += '性別：' + petGender;
+								cardHtml += '</p>';
+							cardHtml += '</div>';
+							cardHtml += '<div class="col s7 column2">';
+								cardHtml += '<p class="master-location truncate">';
+									cardHtml += '走失地點：' + missingPets[j].location;
+								cardHtml += '</p>';
+								cardHtml += '<p class="master-missingDate">';
+									var date = missingPets[j].missingDate;
+									cardHtml += '走失日期：' + moment(date).format('L');
+								cardHtml += '</p>';
+								cardHtml += '<p class="master-mostDistantFuture">';
+									var createdDate = missingPets[j].createdAt;
+									var updatedDate = missingPets[j].updatedAt;
+									//var mostDistantFuture = moment().max(createdDate, updatedDate);
+									if (updatedDate !== '' || updatedDate !== null || updatedDate !== undefined) {
+										var mostDistantFuture = updatedDate;
+									} else {
+										var mostDistantFuture = createdDate;
+									}
+									cardHtml += '更新日期：' + moment(mostDistantFuture).format('L');
+								cardHtml += '</p>';
+							cardHtml += '</div>';
+						cardHtml += '</div>';
+					cardHtml += '</div>';
+				cardHtml += '</div>';
+			}
+			return cardHtml
+		}
+
+
+		//function to get locale info for moment
+		function getLocale() {
+			var userLang = navigator.language || navigator.userLanguage;
+			return userLang
+		}
+	
 	}); //end of DOMcontentLoaded
 </script>
 
