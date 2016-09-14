@@ -67,22 +67,24 @@
 			<!---- <% if(Number(offset) <= 0) { %>
 				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
 			<% } else { %>
-				<li id="pagePrevious" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
+				<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
 			<% } %>  ---->
 			<% if(Number(offset) <= 0) { %>
 				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
 			<% } else { %>
-				<li id="pagePrevious" class="page waves-effect"><i class="material-icons">chevron_left</i></a></li>
+				<li id="pagePrevious" class="page waves-effect"><a><i class="material-icons">chevron_left</i></a></li>
 			<% } %>
 
 			<!---------------------- create pagination by total  ----------------------> 
 			<% for(var j = 0; j < totalPage; j++) { %>
+					
+
 					<% if(Number(offset) === offsetPage) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
 					<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
 					<% } else {%>
-						<li id="page<%= j+1 %>" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= offsetPage %>"><%= j+1 %></a></li>
+						<li id="page<%= j+1 %>" class="page waves-effect"><a><%= j+1 %></a></li>
 					<% } %>
 					<% offsetPage += 10; %>
 			<% } %>
@@ -93,11 +95,14 @@
 			<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
 				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
 			<% } else { %>
-				<% if (Number(offset) < 0) { %>
+				<!---- <% if (Number(offset) < 0) { %>
 					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
 				<% } else { %>
 					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
-				<% } %>
+				<% } %> ----->
+
+				<li id="pageNext" class="page waves-effect"><a><i class="material-icons">chevron_right</i></a></li>
+
 			<% } %>	
 	  	</ul>
 	</div>
@@ -131,9 +136,13 @@ type of offset = <%= typeof offset %>
 	document.addEventListener("DOMContentLoaded",  function() {
 
 		var offset = <%- offset %>;
-		console.log(offset);
+		console.log('offset = ' + offset);
 		var limit = <%- limit %>;
-		console.log(limit);
+		console.log('limit = ' + limit);
+		var total = <%- total %>;
+		console.log('total = ' + total);
+		var totalPage = Math.ceil(total/10);
+
 		//function for hide spinner when img onload	
 		hideSpinner();
 		function hideSpinner() {
@@ -150,40 +159,65 @@ type of offset = <%= typeof offset %>
 			});
 		}
 
-		//get locale info for moment
-
-		//var locale = moment().locale(getLocale());
-		//var localLocale = moment();
-
-		//localLocale.locale(getLocale());
-		//console.log(localLocale.locale)
-		//moment.locale('zh-TW');
-		//moment.locale('fr')
 		moment.locale(getLocale());
-		//console.log(getLocale());
-		//console.log(moment);
-		//console.log(moment.locale());
+
+
 		
-
-
-
-		//AJAX for pagePrevious
+		//get AJAX for pagePrevious
 		document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
 
 		function toPreviousPage() {
-			var xhttp = new XMLHttpRequest();
+			if(Number(offset) <= 0) {
+				offset = 0;
+			} else {
+				offset -= 10;
+			}
+			getAjax(offset);
+			console.log('offsetPre = ' + offset);
+		}
+
+		//get AJAX for pageNext
+		document.getElementById("pageNext").addEventListener("click", toNextPage);
+
+		function toNextPage() {
+			if(Number(offset) >= (totalPage * 10)) {
+				offset = (totalPage * 10) - 10;
+			} else {
+				offset += 10;
+			}
+			getAjax(offset);
+			console.log('offsetNext = ' + offset);
+		}
+
+		//get AJAX for peges
+		//document.getElementsByClassName("page").addEventListener("click", function() {toPage(this)});
+
+		for(var i = 1; i < totalPage +1; i++ ) {
+			document.getElementById("page" + i).addEventListener("click", function() {toPage(i);});
+		}
+
+		function toPage(page) {
+			offset = 10 * page;
+			getAjax(offset);
+		}
+
+
+		function getAjax(offset) {
+			var xhttp = new XMLHttpRequest()
+			var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC'
+			console.log(requestUrl);
 			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-      				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
-      				//document.getElementById("row").innerHTML = JSON.parse(this.responseText);
-      				//var missingPets = JSON.parse(this.responseText);
+				if(this.readyState == 4 && this.status == 200) {
+					console.log(JSON.parse(this.responseText));
+      				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText)) + createNewPagination(offset);
       				hideSpinner();
-      				console.log(offset);
    				}
   			};
-  			xhttp.open("GET", "/missingPet?limit=10&skip=0&sort=updatedAt%20DESC", true);
-  			xhttp.send()
+  			xhttp.open("GET", requestUrl, true);
+  			xhttp.send();
 		}
+
+
 
 
 		
@@ -253,6 +287,9 @@ type of offset = <%= typeof offset %>
 					cardHtml += '</div>';
 				cardHtml += '</div>';
 			}
+			console.log('total = ' + total);
+			console.log('offset = ' + offset);
+			console.log('limit = ' + limit);
 			return cardHtml
 		}
 
@@ -262,6 +299,45 @@ type of offset = <%= typeof offset %>
 			var userLang = navigator.language || navigator.userLanguage;
 			return userLang
 		}
+
+		function createNewPagination(offset) {
+			var pageHtml = '';
+			var offsetPage = 0;
+			pageHtml += '<div class = "col s12 m12 center-align">';
+				pageHtml += '<ul class="pagination">';
+
+					//<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
+				
+					if(Number(offset) <= 0) {
+						pageHtml += '<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>';
+					} else {
+						pageHtml += '<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a><i class="material-icons">chevron_left</i></a></li>';
+					}
+
+					//<!---------------------- create pagination by total  ----------------------> 
+
+					for(var j = 0; j < totalPage; j++) {
+						if(Number(offset) === offsetPage) {
+							pageHtml += '<li id="page' + (j+1)  + '" class="page waves-effect active"><a>' + (j+1) + '</a></li>';
+						} else if (Number(offset) < 0 & offsetPage === 0) {
+							pageHtml += '<li id="page' + (j+1) + '" class="page waves-effect active"><a>' + (j+1) + '</a></li>';
+						} else {
+							pageHtml += '<li id="page' + (j+1) + '" class="page waves-effect" onclick="toPage(j+1)"><a>' + (j+1) + '</a></li>';
+						}
+						offsetPage += 10;
+					}
+
+					//<!---------------------- create chevron_right icon ---------------------->
+					if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
+						pageHtml += '<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>';
+					} else {
+						pageHtml += '<li id="pageNext" class="page waves-effect" onclick="toNextPage()"><a><i class="material-icons">chevron_right</i></a></li>';
+					}	
+			  	pageHtml += '</ul>';
+			pageHtml += '</div>';
+			return pageHtml;
+		}
+
 	
 	}); //end of DOMcontentLoaded
 </script>
