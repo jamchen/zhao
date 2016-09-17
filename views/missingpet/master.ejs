@@ -57,55 +57,53 @@
 			</div>
 		</div>
 	<% } %>
+</div>
 
-	<div class = "col s12 m12 center-align">
-		<ul class="pagination">
-			<% var totalPage = Math.ceil(total/10) %>
-			<% var offsetPage = 0 %>
+<div class = "col s12 m12 center-align">
+	<ul class="pagination">
+		<% var totalPage = Math.ceil(total/10) %>
+		<% var offsetPage = 0 %>
 
-			<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
-			<!---- <% if(Number(offset) <= 0) { %>
-				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
+		<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
+		<!---- <% if(Number(offset) <= 0) { %>
+			<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
+		<% } else { %>
+			<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
+		<% } %>  ---->
+		<% if(Number(offset) <= 0) { %>
+			<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
+		<% } else { %>
+			<li id="pagePrevious" class="page waves-effect"><a><i class="material-icons">chevron_left</i></a></li>
+		<% } %>
+
+		<!---------------------- create pagination by total  ----------------------> 
+		<% for(var j = 0; j < totalPage; j++) { %>
+				<% if(Number(offset) === offsetPage) { %>
+					<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
+				<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
+					<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
+				<% } else {%>
+					<li id="page<%= j+1 %>" class="page waves-effect"><a><%= j+1 %></a></li>
+				<% } %>
+				<% offsetPage += 10; %>
+		<% } %>
+
+		
+
+		<!---------------------- create chevron_right icon ---------------------->
+		<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
+			<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
+		<% } else { %>
+			<!---- <% if (Number(offset) < 0) { %>
+				<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
 			<% } else { %>
-				<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
-			<% } %>  ---->
-			<% if(Number(offset) <= 0) { %>
-				<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
-			<% } else { %>
-				<li id="pagePrevious" class="page waves-effect"><a><i class="material-icons">chevron_left</i></a></li>
-			<% } %>
+				<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
+			<% } %> ----->
 
-			<!---------------------- create pagination by total  ----------------------> 
-			<% for(var j = 0; j < totalPage; j++) { %>
-					
+			<li id="pageNext" class="page waves-effect"><a><i class="material-icons">chevron_right</i></a></li>
 
-					<% if(Number(offset) === offsetPage) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
-					<% } else if (Number(offset) < 0 & offsetPage === 0) { %>
-						<li id="page<%= j+1 %>" class="page waves-effect active"><a><%= j+1 %></a></li>
-					<% } else {%>
-						<li id="page<%= j+1 %>" class="page waves-effect"><a><%= j+1 %></a></li>
-					<% } %>
-					<% offsetPage += 10; %>
-			<% } %>
-
-			
-
-			<!---------------------- create chevron_right icon ---------------------->
-			<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
-				<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
-			<% } else { %>
-				<!---- <% if (Number(offset) < 0) { %>
-					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= 10 %>"><i class="material-icons">chevron_right</i></a></li>
-				<% } else { %>
-					<li id="pageNext" class="page waves-effect"><a href="/missingPet/master?limit=10&offset=<%= Number(offset) + 10 %>"><i class="material-icons">chevron_right</i></a></li>
-				<% } %> ----->
-
-				<li id="pageNext" class="page waves-effect"><a><i class="material-icons">chevron_right</i></a></li>
-
-			<% } %>	
-	  	</ul>
-	</div>
+		<% } %>	
+  	</ul>
 </div>
 
 
@@ -133,213 +131,213 @@ type of offset = <%= typeof offset %>
 <!------------ JavaSctipt --------------->
 <script type="text/javascript">
 
-	document.addEventListener("DOMContentLoaded",  function() {
+	
+document.addEventListener("DOMContentLoaded",  function() {
 
-		var offset = <%- offset %>;
-		console.log('offset = ' + offset);
-		var limit = <%- limit %>;
-		console.log('limit = ' + limit);
-		var total = <%- total %>;
-		console.log('total = ' + total);
-		var totalPage = Math.ceil(total/10);
+	var offset = <%- offset %>;		
+	if(offset < 0) {
+		offset = 0;
+	} else {
+		offset = Math.floor(offset / 10) * 10;
+	}
+	console.log('offset = ' + offset);
+	var limit = <%- limit %>;
+	console.log('limit = ' + limit);
+	var total = <%- total %>;
+	console.log('total = ' + total);
+	var totalPage = Math.ceil(total/10);
+	moment.locale(getLocale());
 
-		//function for hide spinner when img onload	
-		hideSpinner();
-		function hideSpinner() {
-			for (var k = 0; k < 10; k++) {
-				$('#master-picture' + k).hide();
-				checkImgStatus(k);
-			}
+	//function for hide spinner when img onload	
+	hideSpinner();
+	function hideSpinner() {
+		for (var k = 0; k < 10; k++) {
+			$('#master-picture' + k).hide();
+			checkImgStatus(k);
 		}
+	}
 
-		function checkImgStatus(num) {
-			$('#master-picture' + num).load(function() {
-				$('#master-picture' + num).show();
-				$('#loader' + num).removeClass('loader');
-			});
+	function checkImgStatus(num) {
+		$('#master-picture' + num).load(function() {
+			$('#master-picture' + num).show();
+			$('#loader' + num).removeClass('loader');
+		});
+	}
+	
+	//function when click event has triggered by previous button
+	document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
+	
+	function toPreviousPage() {
+		if(Number(offset) <= 0) {
+			offset = 0;
+		} else {
+			offset -= 10;
 		}
+		getAjax(offset);
+		console.log('offsetPre = ' + offset);
+	}
 
-		moment.locale(getLocale());
+	//function when click event has triggered by next button
+	document.getElementById("pageNext").addEventListener("click", toNextPage);
 
-
-		
-		//get AJAX for pagePrevious
-		document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
-
-		function toPreviousPage() {
-			if(Number(offset) <= 0) {
-				offset = 0;
-			} else {
-				offset -= 10;
-			}
-			getAjax(offset);
-			console.log('offsetPre = ' + offset);
+	function toNextPage() {
+		if(Number(offset) >= (totalPage * 10)) {
+			offset = (totalPage * 10) - 10;
+		} else {
+			offset += 10;
 		}
+		getAjax(offset);
+		console.log('offsetNext = ' + offset);
+	}
 
-		//get AJAX for pageNext
-		document.getElementById("pageNext").addEventListener("click", toNextPage);
+	//function when click event has triggered by page buttons
+	for(var i = 1; i < totalPage +1; i++ ) {
+        (function(page) {
+            document.getElementById("page" + i).addEventListener("click", function() {
+                toPage(page);
+                console.log('ddd', page);
+            });
+        })(i);
+    }
 
-		function toNextPage() {
-			if(Number(offset) >= (totalPage * 10)) {
-				offset = (totalPage * 10) - 10;
-			} else {
-				offset += 10;
-			}
-			getAjax(offset);
-			console.log('offsetNext = ' + offset);
-		}
+	function toPage(page) {
+		offset = 10 * page - 10;
+		getAjax(offset);
+	}
 
-		//get AJAX for peges
-		//document.getElementsByClassName("page").addEventListener("click", function() {toPage(this)});
-
-		for(var i = 1; i < totalPage +1; i++ ) {
-			document.getElementById("page" + i).addEventListener("click", function() {toPage(i);});
-		}
-
-		function toPage(page) {
-			offset = 10 * page;
-			getAjax(offset);
-		}
-
-
-		function getAjax(offset) {
-			var xhttp = new XMLHttpRequest()
-			var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC'
-			console.log(requestUrl);
-			xhttp.onreadystatechange = function() {
-				if(this.readyState == 4 && this.status == 200) {
-					console.log(JSON.parse(this.responseText));
-      				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText)) + createNewPagination(offset);
-      				hideSpinner();
-   				}
-  			};
-  			xhttp.open("GET", requestUrl, true);
-  			xhttp.send();
-		}
+	//get AJAX for peges
+	function getAjax(offset) {
+		var xhttp = new XMLHttpRequest()
+		var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC'
+		xhttp.onreadystatechange = function() {
+			if(this.readyState == 4 && this.status == 200) {
+  				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
+  				paginationClassesForNewPage(offset);
+  				hideSpinner();
+				}
+			};
+			xhttp.open("GET", requestUrl, true);
+			xhttp.send();
+	}
 
 
-
-
-		
-
-		function createNewCardByAjax(missingPets) {
-			var cardHtml = '';
-			for(var j = 0; j < missingPets.length; j++) {
-				cardHtml += '<div class="col s12 m6">';
-					cardHtml += '<div class="col m12 s12 card">';
-						cardHtml += '<a target="_blank" href="/missingPet/detail/' + missingPets[j].id + ' ">';
-							cardHtml += '<div class="card-image waves-effect waves-block waves-light">';
-								cardHtml += '<div id="mainPicture' + j + '">';
-									cardHtml += '<div id="loader' + j + '" class="loader">';
-								 	cardHtml += '<img id="master-picture' + j + '" class="activator master-picture" src="' + missingPets[j].mainPictureUrl + '">';
-								 	cardHtml += '</div>';
-								cardHtml += '</div>';
-								cardHtml += '<span class="card-title activator master-name col s12 grey image-title">';
-									cardHtml += '名稱：'+ missingPets[j].name;
-									cardHtml += '<i class="material-icons right">more_vert</i>';
-								cardHtml += '</span>';
+	//create new cards by AJAX
+	function createNewCardByAjax(missingPets) {
+		var cardHtml = '';
+		for(var j = 0; j < missingPets.length; j++) {
+			cardHtml += '<div class="col s12 m6">';
+				cardHtml += '<div class="col m12 s12 card">';
+					cardHtml += '<a target="_blank" href="/missingPet/detail/' + missingPets[j].id + ' ">';
+						cardHtml += '<div class="card-image waves-effect waves-block waves-light">';
+							cardHtml += '<div id="mainPicture' + j + '">';
+								cardHtml += '<div id="loader' + j + '" class="loader">';
+							 	cardHtml += '<img id="master-picture' + j + '" class="activator master-picture" src="' + missingPets[j].mainPictureUrl + '">';
+							 	cardHtml += '</div>';
 							cardHtml += '</div>';
-						cardHtml += '</a>';
+							cardHtml += '<span class="card-title activator master-name col s12 grey image-title">';
+								cardHtml += '名稱：'+ missingPets[j].name;
+								cardHtml += '<i class="material-icons right">more_vert</i>';
+							cardHtml += '</span>';
+						cardHtml += '</div>';
+					cardHtml += '</a>';
 
-						
-						cardHtml += '<div class="card-content flow-text">';
-							cardHtml += '<div class="col s5 column1 truncate">';
-								cardHtml += '<p class="master-kind">';
-									cardHtml += '類別：' + missingPets[j].kind;
-								cardHtml += '</p>';
-								cardHtml += '<p class="master-breed">';
-									cardHtml += '品種：' + missingPets[j].breed;
-								cardHtml += '</p>';
-								cardHtml += '<p class="master-color">';
-									cardHtml += '花色：' + missingPets[j].color;
-								cardHtml += '</p>';
-								cardHtml += '<p class="master-gender">';
-									var petGender = missingPets[j].gender
-									if(petGender == 'male') {
-										petGender = '公'
-									} else if(petGender == 'female') {
-										petGender = '母'
-									}
-									cardHtml += '性別：' + petGender;
-								cardHtml += '</p>';
-							cardHtml += '</div>';
-							cardHtml += '<div class="col s7 column2">';
-								cardHtml += '<p class="master-location truncate">';
-									cardHtml += '走失地點：' + missingPets[j].location;
-								cardHtml += '</p>';
-								cardHtml += '<p class="master-missingDate">';
-									var date = missingPets[j].missingDate;
-									cardHtml += '走失日期：' + moment(date).format('L');
-								cardHtml += '</p>';
-								cardHtml += '<p class="master-mostDistantFuture">';
-									var createdDate = missingPets[j].createdAt;
-									var updatedDate = missingPets[j].updatedAt;
-									//var mostDistantFuture = moment().max(createdDate, updatedDate);
-									if (updatedDate !== '' || updatedDate !== null || updatedDate !== undefined) {
-										var mostDistantFuture = updatedDate;
-									} else {
-										var mostDistantFuture = createdDate;
-									}
-									cardHtml += '更新日期：' + moment(mostDistantFuture).format('L');
-								cardHtml += '</p>';
-							cardHtml += '</div>';
+					
+					cardHtml += '<div class="card-content flow-text">';
+						cardHtml += '<div class="col s5 column1 truncate">';
+							cardHtml += '<p class="master-kind">';
+								cardHtml += '類別：' + missingPets[j].kind;
+							cardHtml += '</p>';
+							cardHtml += '<p class="master-breed">';
+								cardHtml += '品種：' + missingPets[j].breed;
+							cardHtml += '</p>';
+							cardHtml += '<p class="master-color">';
+								cardHtml += '花色：' + missingPets[j].color;
+							cardHtml += '</p>';
+							cardHtml += '<p class="master-gender">';
+								var petGender = missingPets[j].gender
+								if(petGender == 'male') {
+									petGender = '公'
+								} else if(petGender == 'female') {
+									petGender = '母'
+								}
+								cardHtml += '性別：' + petGender;
+							cardHtml += '</p>';
+						cardHtml += '</div>';
+						cardHtml += '<div class="col s7 column2">';
+							cardHtml += '<p class="master-location truncate">';
+								cardHtml += '走失地點：' + missingPets[j].location;
+							cardHtml += '</p>';
+							cardHtml += '<p class="master-missingDate">';
+								var date = missingPets[j].missingDate;
+								cardHtml += '走失日期：' + moment(date).format('L');
+							cardHtml += '</p>';
+							cardHtml += '<p class="master-mostDistantFuture">';
+								var createdDate = missingPets[j].createdAt;
+								var updatedDate = missingPets[j].updatedAt;
+								//var mostDistantFuture = moment().max(createdDate, updatedDate);
+								if (updatedDate !== '' || updatedDate !== null || updatedDate !== undefined) {
+									var mostDistantFuture = updatedDate;
+								} else {
+									var mostDistantFuture = createdDate;
+								}
+								cardHtml += '更新日期：' + moment(mostDistantFuture).format('L');
+							cardHtml += '</p>';
 						cardHtml += '</div>';
 					cardHtml += '</div>';
 				cardHtml += '</div>';
-			}
-			console.log('total = ' + total);
-			console.log('offset = ' + offset);
-			console.log('limit = ' + limit);
-			return cardHtml
+			cardHtml += '</div>';
+		}
+		console.log('total = ' + total);
+		console.log('offset = ' + offset);
+		console.log('limit = ' + limit);
+		return cardHtml
+	}
+
+
+	//function to get locale info for moment
+	function getLocale() {
+		var userLang = navigator.language || navigator.userLanguage;
+		return userLang
+	}
+
+	//function to change classes to fit new page
+	function paginationClassesForNewPage(offset) {
+
+		$('.page').removeClass('disabled');
+		$('.page').removeClass('active');
+
+		if(Number(offset) <= 0) {
+			$('#pagePrevious').removeClass('waves-effect');
+			$('#pagePrevious').addClass('disabled');
 		}
 
-
-		//function to get locale info for moment
-		function getLocale() {
-			var userLang = navigator.language || navigator.userLanguage;
-			return userLang
+		$('#page' + Math.floor((offset/10) + 1)).addClass('active');
+		
+		if(Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
+			$('#pageNext').removeClass('waves-effect');
+			$('#pageNext').addClass('disabled');
 		}
+	}
 
-		function createNewPagination(offset) {
-			var pageHtml = '';
-			var offsetPage = 0;
-			pageHtml += '<div class = "col s12 m12 center-align">';
-				pageHtml += '<ul class="pagination">';
-
-					//<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
-				
-					if(Number(offset) <= 0) {
-						pageHtml += '<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>';
-					} else {
-						pageHtml += '<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a><i class="material-icons">chevron_left</i></a></li>';
-					}
-
-					//<!---------------------- create pagination by total  ----------------------> 
-
-					for(var j = 0; j < totalPage; j++) {
-						if(Number(offset) === offsetPage) {
-							pageHtml += '<li id="page' + (j+1)  + '" class="page waves-effect active"><a>' + (j+1) + '</a></li>';
-						} else if (Number(offset) < 0 & offsetPage === 0) {
-							pageHtml += '<li id="page' + (j+1) + '" class="page waves-effect active"><a>' + (j+1) + '</a></li>';
-						} else {
-							pageHtml += '<li id="page' + (j+1) + '" class="page waves-effect" onclick="toPage(j+1)"><a>' + (j+1) + '</a></li>';
-						}
-						offsetPage += 10;
-					}
-
-					//<!---------------------- create chevron_right icon ---------------------->
-					if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
-						pageHtml += '<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>';
-					} else {
-						pageHtml += '<li id="pageNext" class="page waves-effect" onclick="toNextPage()"><a><i class="material-icons">chevron_right</i></a></li>';
-					}	
-			  	pageHtml += '</ul>';
-			pageHtml += '</div>';
-			return pageHtml;
+	//check pagination staus for click event
+	/*function checkPaginationStatus() {
+		if($('#pagePrevious').hasClass('disabled') === false) {
+			document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
 		}
+		for(var i = 1; i < totalPage +1; i++ ) {
+            (function(page) {
+                document.getElementById("page" + i).addEventListener("click", function() {
+                    toPage(page);
+                    console.log('ddd', page);
+	                });
+	        })(i);
+        }
+        if($('#pageNext').hasClass('disabled') === false) {
+		document.getElementById("pageNext").addEventListener("click", toNextPage);
+		}
+	}*/
 
-	
-	}); //end of DOMcontentLoaded
+}); //end of DOMcontentLoaded event
 </script>
 
 
