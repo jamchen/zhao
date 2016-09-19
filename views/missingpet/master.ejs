@@ -65,11 +65,7 @@
 		<% var offsetPage = 0 %>
 
 		<!---------------------- create chevron_left icon, if offset <= 0, disabled icon---------------------->
-		<!---- <% if(Number(offset) <= 0) { %>
-			<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
-		<% } else { %>
-			<li id="pagePrevious" class="page waves-effect" onclick="toPreviousPage()"><a href="/missingPet/master?limit=10&offset=<%= (Number(offset) - 10) %>"><i class="material-icons">chevron_left</i></a></li>
-		<% } %>  ---->
+
 		<% if(Number(offset) <= 0) { %>
 			<li id="pagePrevious" class="page disabled"><a><i class="material-icons">chevron_left</i></a></li>
 		<% } else { %>
@@ -88,8 +84,6 @@
 				<% offsetPage += 10; %>
 		<% } %>
 
-		
-
 		<!---------------------- create chevron_right icon ---------------------->
 		<% if (Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) { %>
 			<li id="pageNext" class="page disabled"><a><i class="material-icons">chevron_right</i></a></li>
@@ -106,8 +100,6 @@
   	</ul>
 </div>
 
-
-<p id="test" color="red"></p>
 
 <br>
 <%= req.getLocale() %>
@@ -129,4 +121,14 @@ type of offset = <%= typeof offset %>
 
 
 <!------------ JavaSctipt --------------->
+<script>
+	(function (global) {
+		var dc = {};
+		dc.offset = <%- offset %>;
+		dc.limit = <%- limit %>;
+		dc.total = <%- total %>;
+		global.$dc = dc;
+	})(window);
+</script>
 <script type="text/javascript" src="/js/view_specific/test.js"></script>
+
