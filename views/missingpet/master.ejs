@@ -168,26 +168,30 @@ document.addEventListener("DOMContentLoaded",  function() {
 	document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
 	
 	function toPreviousPage() {
-		if(Number(offset) <= 0) {
+		if($('#pagePrevious').hasClass('disabled') === false) {
+			if(Number(offset) <= 0) {
 			offset = 0;
-		} else {
-			offset -= 10;
-		}
-		getAjax(offset);
-		console.log('offsetPre = ' + offset);
+			} else {
+				offset -= 10;
+			}
+			getAjax(offset);
+			console.log('offsetPre = ' + offset);
+		}	
 	}
 
 	//function when click event has triggered by next button
 	document.getElementById("pageNext").addEventListener("click", toNextPage);
 
 	function toNextPage() {
-		if(Number(offset) >= (totalPage * 10)) {
-			offset = (totalPage * 10) - 10;
-		} else {
-			offset += 10;
+		if($('#pageNext').hasClass('disabled') === false) {
+			if(Number(offset) >= (totalPage * 10) - 10) {
+				offset = (totalPage * 10) - 10;
+			} else {
+				offset += 10;
+			}
+			getAjax(offset);
+			console.log('offsetNext = ' + offset);
 		}
-		getAjax(offset);
-		console.log('offsetNext = ' + offset);
 	}
 
 	//function when click event has triggered by page buttons
@@ -195,7 +199,6 @@ document.addEventListener("DOMContentLoaded",  function() {
         (function(page) {
             document.getElementById("page" + i).addEventListener("click", function() {
                 toPage(page);
-                console.log('ddd', page);
             });
         })(i);
     }
@@ -207,13 +210,14 @@ document.addEventListener("DOMContentLoaded",  function() {
 
 	//get AJAX for peges
 	function getAjax(offset) {
-		var xhttp = new XMLHttpRequest()
-		var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC'
+		var xhttp = new XMLHttpRequest();
+		var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC';
 		xhttp.onreadystatechange = function() {
 			if(this.readyState == 4 && this.status == 200) {
   				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
   				paginationClassesForNewPage(offset);
   				hideSpinner();
+  				checkPaginationStatus();
 				}
 			};
 			xhttp.open("GET", requestUrl, true);
@@ -320,22 +324,26 @@ document.addEventListener("DOMContentLoaded",  function() {
 	}
 
 	//check pagination staus for click event
-	/*function checkPaginationStatus() {
-		if($('#pagePrevious').hasClass('disabled') === false) {
-			document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
+	function checkPaginationStatus() {
+		if($('#pagePrevious').hasClass('disabled')) {
+			$('#pagePrevious').click(function(event) {
+				event.stopPropagation();
+			});
 		}
-		for(var i = 1; i < totalPage +1; i++ ) {
+		/*for(var i = 1; i < totalPage +1; i++ ) {
             (function(page) {
                 document.getElementById("page" + i).addEventListener("click", function() {
                     toPage(page);
                     console.log('ddd', page);
 	                });
 	        })(i);
-        }
-        if($('#pageNext').hasClass('disabled') === false) {
-		document.getElementById("pageNext").addEventListener("click", toNextPage);
+        }*/
+        if($('#pageNext').hasClass('disabled')) {
+			$('#pageNext').click(function(event) {
+				event.stopPropagation();
+			});
 		}
-	}*/
+	}
 
 }); //end of DOMcontentLoaded event
 </script>
