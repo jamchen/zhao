@@ -198,7 +198,9 @@ document.addEventListener("DOMContentLoaded",  function() {
 	for(var i = 1; i < totalPage +1; i++ ) {
         (function(page) {
             document.getElementById("page" + i).addEventListener("click", function() {
-                toPage(page);
+            	if(offset !== (page * 10) - 10) {
+            		toPage(page);
+            	}
             });
         })(i);
     }
@@ -217,7 +219,6 @@ document.addEventListener("DOMContentLoaded",  function() {
   				document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
   				paginationClassesForNewPage(offset);
   				hideSpinner();
-  				checkPaginationStatus();
 				}
 			};
 			xhttp.open("GET", requestUrl, true);
@@ -320,28 +321,6 @@ document.addEventListener("DOMContentLoaded",  function() {
 		if(Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
 			$('#pageNext').removeClass('waves-effect');
 			$('#pageNext').addClass('disabled');
-		}
-	}
-
-	//check pagination staus for click event
-	function checkPaginationStatus() {
-		if($('#pagePrevious').hasClass('disabled')) {
-			$('#pagePrevious').click(function(event) {
-				event.stopPropagation();
-			});
-		}
-		/*for(var i = 1; i < totalPage +1; i++ ) {
-            (function(page) {
-                document.getElementById("page" + i).addEventListener("click", function() {
-                    toPage(page);
-                    console.log('ddd', page);
-	                });
-	        })(i);
-        }*/
-        if($('#pageNext').hasClass('disabled')) {
-			$('#pageNext').click(function(event) {
-				event.stopPropagation();
-			});
 		}
 	}
 
