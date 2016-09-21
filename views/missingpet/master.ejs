@@ -100,16 +100,17 @@
   	</ul>
 </div>
 
+<script type="text/javascript" src="/js/view_specific/missingpet/master.js"></script>
 
 <!------------ JavaSctipt --------------->
 <script>
-	(function (global) {
-		var dc = {};
-		dc.offset = <%- offset %>;
-		dc.limit = <%- limit %>;
-		dc.total = <%- total %>;
-		global.$dc = dc;
-	})(window);
+	document.addEventListener("DOMContentLoaded",  function() {
+		var options = {};
+		options.offset = <%- offset %>;
+		options.limit = <%- limit %>;
+		options.total = <%- total %>;
+		runMasterJs(options);
+	});
 </script>
-<script type="text/javascript" src="/js/view_specific/missingpet/master.js"></script>
+
 

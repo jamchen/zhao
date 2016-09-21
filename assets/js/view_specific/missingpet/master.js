@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded",  function() {
+function runMasterJs(options) {
 	
-	var dc = $dc
-	var offset = dc.offset;
-	var limit = dc.limit;
-	var total = dc.total;
+	var dc = options;
+	var offset = options.offset;
+	var limit = options.limit;
+	var total = options.total;
 	var totalPage = Math.ceil(total/10);
 
 	moment.locale(navigator.language || navigator.userLanguage);
@@ -188,4 +188,4 @@ document.addEventListener("DOMContentLoaded",  function() {
 		}
 	}
 
-}); //end of DOMcontentLoaded event
+}
