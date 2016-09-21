@@ -101,25 +101,6 @@
 </div>
 
 
-<br>
-<%= req.getLocale() %>
-<br>
-<%= Math.ceil(total/10) %>
-<br>
-資料總數：<%=total%>
-<br>
-<%= missingPets.length %>
-
-<pre>
-
-offset = <%= offset %>
-limit = <%= limit %>
-type of offset = <%= typeof offset %>
-<%= JSON.stringify(missingPets, 0, 4) %>
-</pre>
-
-
-
 <!------------ JavaSctipt --------------->
 <script>
 	(function (global) {
