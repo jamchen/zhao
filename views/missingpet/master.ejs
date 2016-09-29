@@ -5,9 +5,9 @@
 			<div class="col m12 s12 card">
 				<a target="_blank" href="/missingPet/detail/<%= missingPets[i].id %>">
 					<div class="card-image waves-effect waves-block waves-light">
-						<div id="mainPicture <%= i %>">
-							<div id="loader<%= i %>" class="loader">
-						 	<img id="master-picture<%= i %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
+						<div id="mainPicture<%= missingPets[i].id %>">
+							<div id="loader<%= missingPets[i].id %>" class="loader">
+						 	<img id="master-picture<%= missingPets[i].id %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
 						 	</div>
 						</div>
 						<span class="card-title activator master-name col s12 grey image-title">
@@ -95,12 +95,12 @@
 			<% } %> ----->
 
 			<li id="pageNext" class="page waves-effect"><a><i class="material-icons">chevron_right</i></a></li>
-
 		<% } %>	
   	</ul>
 </div>
 
 <script type="text/javascript" src="/js/view_specific/missingpet/master.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>
 
 <!------------ JavaSctipt --------------->
 <script>
