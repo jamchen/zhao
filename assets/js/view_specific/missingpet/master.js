@@ -10,24 +10,27 @@ function runMasterJs(options) {
 	var beginningIdInPage = total - offset;
 	moment.locale(navigator.language || navigator.userLanguage);
 
+	//let offset been zero or multiples of ten
 	if(offset < 0) {
 		offset = 0;
 	} else {
 		offset = Math.floor(offset / 10) * 10;
 	}
 
-	//function for hide spinner when img onload	
-	hideSpinner(beginningIdInPage);
+	//hide spinner when img onload	
+	hidePicture(beginningIdInPage);
 
-	function hideSpinner(beginningIdInPage) {
-		for (var k = beginningIdInPage; k > (beginningIdInPage - 11); k--) {
+	//hide picture when master pictures onload
+	function hidePicture(pictureId) {
+		for (var k = pictureId; k > (pictureId - 11); k--) {
 			(function(id) {
 				$('#master-picture' + id).hide();
 				checkImgStatus(id);
-			})(k)	
+			})(k)
 		}
 	}
 
+	//check if master picture had been loaded, if it had been bloaded, show the picture and hide spinner
 	function checkImgStatus(num) {
 		$('#master-picture' + num).load(function() {
 			$('#master-picture' + num).show();
@@ -39,7 +42,8 @@ function runMasterJs(options) {
 	
 	//function when click event has triggered by previous button
 	document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
-	
+
+	//when pressdown previous page button, change the value of offset and get ajax data (pets informations)
 	function toPreviousPage() {
 		if($('#pagePrevious').hasClass('disabled') === false) {
 			if(Number(offset) <= 0) {
@@ -54,6 +58,7 @@ function runMasterJs(options) {
 	//function when click event has triggered by next button
 	document.getElementById("pageNext").addEventListener("click", toNextPage);
 
+	//when pressdown next page button, change the value of offset and get ajax data (pets informations)
 	function toNextPage() {
 		if($('#pageNext').hasClass('disabled') === false) {
 			if(Number(offset) >= (totalPage * 10) - 10) {
@@ -76,6 +81,7 @@ function runMasterJs(options) {
         })(i);
     }
 
+    //set new offset when click page buttons
 	function toPage(page) {
 		offset = 10 * page - 10;
 		getAjax(offset);
@@ -115,6 +121,7 @@ function runMasterJs(options) {
 		xhttp.send(null);
 	}
 
+	//get card template
 	function getCardHandlerTemplate(htmlContent) {
 		var templateContent = getRequestObject();
 		templateContent.onreadystatechange = function() {
@@ -122,22 +129,84 @@ function runMasterJs(options) {
 				console.log(this.responseText);
 				var sorce = this.responseText;
 				var template = Handlebars.compile(this.responseText);
-				for(var i = 0; i < htmlContent.length; i++) {
-  					(function(cardNum) {
-  						if(cardNum === 0) {
-  							$('#row').html(template(htmlContent[cardNum]));
-  						} else {
-  							$("#row").append(template(htmlContent[cardNum]));
-  						}
-  					})(i);
-  				}
+				appendNewCardInNewPage(template, htmlContent); 				
   				paginationClassesForNewPage(offset);
-  				hideSpinner(total - offset);
+  				hidePicture(total - offset);
 			}
 		}
 		templateContent.open("Get", cardHandlerUrl, true);
 		templateContent.send(null);
 	}
+
+	function appendNewCardInNewPage(template, htmlContent) {
+		for(var i = 0; i < htmlContent.length; i++) {
+			if(i === 0) {
+				$('#row').html(template(htmlContent[i]));
+			} else {
+				$("#row").append(template(htmlContent[i]));
+			}
+		}
+	}
+
+	
+
+	//return exchange datatype
+	function getRequestObject() {
+	  if (window.XMLHttpRequest) {
+	    return (new XMLHttpRequest());
+	  } 
+	  else if (window.ActiveXObject) {
+	    // For very old IE browsers (optional)
+	    return (new ActiveXObject("Microsoft.XMLHTTP"));
+	  } 
+	  else {
+	    // global.alert("Ajax is not supported!");
+	    return(null); 
+	  }
+	}
+
+	//function to change classes for fitting new page
+	function paginationClassesForNewPage(offset) {
+
+		$('.page').removeClass('disabled');
+		$('.page').removeClass('active');
+		// if offset <= 0, set previous button to disabled
+		if(Number(offset) <= 0) {
+			$('#pagePrevious').removeClass('waves-effect');
+			$('#pagePrevious').addClass('disabled');
+		}
+		// active current page button
+		$('#page' + Math.floor((offset/10) + 1)).addClass('active');
+		//if it is last page, set next button to disabled
+		if(Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
+			$('#pageNext').removeClass('waves-effect');
+			$('#pageNext').addClass('disabled');
+		}
+	}
+
+
+
+	// Handlebars helper for cards
+	// translate gender from EN to ZH-TW 
+	Handlebars.registerHelper("genderToChinses", function(gender){
+		if(gender == 'male') {
+			return '公';
+		}
+		else if(gender == 'female') {
+			return '母';
+		}		
+	});
+
+	//change moment format. for example: 10/03/2016. it's related to local date format
+	Handlebars.registerHelper("localDateFormat", function(date){
+		return moment(date).format('L');
+	});
+
+	//choose latest updated/created date
+	Handlebars.registerHelper("lastUpdatedDate", function(createdAt, updatedAt){
+		var mostDistantFuture = moment().max(createdAt, updatedAt);
+		return moment(mostDistantFuture).format('L');
+	});
 
 
 	// function getTemplete(cardHandlerUrl) {
@@ -155,7 +224,7 @@ function runMasterJs(options) {
 	//     	$("#row").html(template(htmlContent[0]) + xhttp.responseText);
 	//     	console.log(xhttp.responseText);
 	//       	paginationClassesForNewPage(offset);
-	// 		hideSpinner()
+	// 		hidePicture()
 	//   }
 	// }
 
@@ -178,21 +247,6 @@ function runMasterJs(options) {
 	// 	    }
 	// 	  }
 	// 	}
-
-
-	function getRequestObject() {
-	  if (window.XMLHttpRequest) {
-	    return (new XMLHttpRequest());
-	  } 
-	  else if (window.ActiveXObject) {
-	    // For very old IE browsers (optional)
-	    return (new ActiveXObject("Microsoft.XMLHTTP"));
-	  } 
-	  else {
-	    // global.alert("Ajax is not supported!");
-	    return(null); 
-	  }
-	}
 
 	//create new cards by AJAX
 	// function createNewCardByAjax(missingPets) {
@@ -266,45 +320,4 @@ function runMasterJs(options) {
 	// 	return cardHtml;
 	// }
 
-
-	// Handlebars helper for cards
-	// translate gender from EN to ZH-TW 
-	Handlebars.registerHelper("genderToChinses", function(gender){
-		if(gender == 'male') {
-			return '公';
-		}
-		else if(gender == 'female') {
-			return '母';
-		}		
-	});
-
-	Handlebars.registerHelper("localDateFormat", function(date){
-		return moment(date).format('L');
-	});
-
-	Handlebars.registerHelper("lastUpdatedDate", function(createdAt, updatedAt){
-		var mostDistantFuture = moment().max(createdAt, updatedAt);
-		return moment(mostDistantFuture).format('L');
-	});
-	
-
-	//function to change classes to fit new page
-	function paginationClassesForNewPage(offset) {
-
-		$('.page').removeClass('disabled');
-		$('.page').removeClass('active');
-
-		if(Number(offset) <= 0) {
-			$('#pagePrevious').removeClass('waves-effect');
-			$('#pagePrevious').addClass('disabled');
-		}
-
-		$('#page' + Math.floor((offset/10) + 1)).addClass('active');
-		
-		if(Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
-			$('#pageNext').removeClass('waves-effect');
-			$('#pageNext').addClass('disabled');
-		}
-	}
-
-}
+} //end of runMasterJs function
