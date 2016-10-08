@@ -33,10 +33,12 @@
 					走失地點：{{location}}
 				</p>
 				<p class="master-missingDate">
-					走失日期：{{localDateFormat missingDate}}
+					走失日期：<br>
+					<p class="text-right">{{localDateFormat missingDate}}</p>
 				</p>
 				<p class="master-mostDistantFuture">
-					更新日期：{{lastUpdatedDate createdAt updatedAt}}
+					更新日期：<br>
+					<p class="text-right">{{lastUpdatedDate createdAt updatedAt}}</p>
 				</p>
 			</div>
 		</div>

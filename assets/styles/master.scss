@@ -10,8 +10,12 @@
 
 @media only screen and (min-width: 601px){
 	.row .col p {
-	font-size: 80%;
+	  font-size: 85%;
 	}
+
+  .text-right {
+    text-align: right;
+  }
 }
 
 .column2, .column1{

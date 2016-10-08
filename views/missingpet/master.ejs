@@ -44,13 +44,15 @@
 						</p>
 						<p class="master-missingDate">
 							<% var date = missingPets[i].missingDate %>
-							走失日期：<%= moment(date).format('L') %>
+							走失日期：<br>
+							<p class="text-right"><%= moment(date).format('L') %></p>
 						</p>
 						<p class="master-mostDistantFuture">
 							<% var createdDate = missingPets[i].createdAt %>
 							<% var updatedDate = missingPets[i].updatedAt %>
 							<% var mostDistantFuture = moment().max(createdDate, updatedDate) %>
-							更新日期：<%= moment(mostDistantFuture).format('L') %>
+							更新日期：<br>
+							<p class="text-right"><%= moment(mostDistantFuture).format('L') %></p>
 						</p>
 					</div>
 				</div>
