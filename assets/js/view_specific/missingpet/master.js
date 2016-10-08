@@ -17,8 +17,12 @@ function runMasterJs(options) {
 		offset = Math.floor(offset / 10) * 10;
 	}
 
-	//hide spinner when img onload	
+	//hide picture when master pictures onload	
 	hidePicture(beginningIdInPage);
+	//trigger toNextPage function when next page button had been clicked
+	document.getElementById("pageNext").addEventListener("click", toNextPage);
+	//trigger toPreviousPage function when previous page button had been clicked
+	document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
 
 	//hide picture when master pictures onload
 	function hidePicture(pictureId) {
@@ -38,10 +42,6 @@ function runMasterJs(options) {
 		});
 	}
 
-	
-	
-	//function when click event has triggered by previous button
-	document.getElementById("pagePrevious").addEventListener("click", toPreviousPage);
 
 	//when pressdown previous page button, change the value of offset and get ajax data (pets informations)
 	function toPreviousPage() {
@@ -55,8 +55,6 @@ function runMasterJs(options) {
 		}	
 	}
 
-	//function when click event has triggered by next button
-	document.getElementById("pageNext").addEventListener("click", toNextPage);
 
 	//when pressdown next page button, change the value of offset and get ajax data (pets informations)
 	function toNextPage() {
@@ -70,7 +68,7 @@ function runMasterJs(options) {
 		}
 	}
 
-	//function when click event has triggered by page buttons
+	//trigger toPage function when page button had been clicked
 	for(var i = 1; i < totalPage +1; i++ ) {
         (function(page) {
             document.getElementById("page" + i).addEventListener("click", function() {
