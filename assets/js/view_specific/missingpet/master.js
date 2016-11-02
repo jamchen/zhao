@@ -206,7 +206,7 @@ function runMasterJs(options) {
 		return moment(mostDistantFuture).format('L');
 	});
 
-
+	getCardHandlerTemplate(options.missingPets);
 	// function getTemplete(cardHandlerUrl) {
 	// 	var source = getRequestObject();
 	// 	source.onreadystatechange = function() {
