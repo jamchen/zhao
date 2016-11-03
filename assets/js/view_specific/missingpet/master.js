@@ -110,6 +110,7 @@ function runMasterJs(options) {
         appendNewCardInNewPage(template, htmlContent);        
           paginationClassesForNewPage(offset);
           hidePicture(total - offset);
+          $('html, body').scrollTop(0);
       }
     }
     templateContent.open("Get", cardHandlerUrl, true);
