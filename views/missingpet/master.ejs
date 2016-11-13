@@ -1,64 +1,6 @@
 
 <div id="row" class="row">
-	<% for(i = 0; i < missingPets.length; i++) { %>
-		<div class="col s12 m6">
-			<div class="col m12 s12 card">
-				<a target="_blank" href="/missingPet/detail/<%= missingPets[i].id %>">
-					<div class="card-image waves-effect waves-block waves-light">
-						<div id="mainPicture<%= missingPets[i].id %>">
-							<div id="loader<%= missingPets[i].id %>" class="loader">
-						 	<img id="master-picture<%= missingPets[i].id %>" class="activator master-picture" src="<%= missingPets[i].mainPictureUrl %>">
-						 	</div>
-						</div>
-						<span class="card-title activator master-name col s12 grey image-title">
-							名稱：<%= missingPets[i].name %>
-							<i class="material-icons right">more_vert</i>
-						</span>
-					</div>
-				</a>
-				<div class="card-content flow-text">
-					<div class="col s5 column1 truncate">
-						<p class="master-kind">
-							類別：<%= missingPets[i].kind %>
-						</p>
-						<p class="master-breed">
-							品種：<%= missingPets[i].breed %>
-						</p>
-						<p class="master-color">
-							花色：<%= missingPets[i].color %>
-						</p>
-						<p class="master-gender">
-							<% var petGender = missingPets[i].gender %>
-							<% if(petGender == 'male') { %>
-								<% petGender = '公' %>
-							<% } else if(petGender == 'female') { %>
-								<% petGender = '母' %>
-							<% } %>
-							性別：<%= petGender %>
-						</p>
-						
-					</div>
-					<div class="col s7 column2">
-						<p class="master-location truncate">
-							走失地點：<%= missingPets[i].location %>
-						</p>
-						<p class="master-missingDate">
-							<% var date = missingPets[i].missingDate %>
-							走失日期：<br>
-							<p class="text-right"><%= moment(date).format('L') %></p>
-						</p>
-						<p class="master-mostDistantFuture">
-							<% var createdDate = missingPets[i].createdAt %>
-							<% var updatedDate = missingPets[i].updatedAt %>
-							<% var mostDistantFuture = moment().max(createdDate, updatedDate) %>
-							更新日期：<br>
-							<p class="text-right"><%= moment(mostDistantFuture).format('L') %></p>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	<% } %>
+	
 </div>
 
 <div class = "col s12 m12 center-align">
@@ -111,6 +53,7 @@
 		options.offset = <%- offset %>;
 		options.limit = <%- limit %>;
 		options.total = <%- total %>;
+		options.missingPets = <%- JSON.stringify(missingPets) %>;
 		runMasterJs(options);
 	});
 </script>

@@ -1,6 +1,6 @@
 function runMasterJs(options) {
   
-  var cardHandlerUrl = '/js/view_specific/cardHtmlTemplate.js';
+  var cardHandlerUrl = '/js/view_specific/cardHtmlTemplate.html';
 
   var dc = options;
   var offset = options.offset;
@@ -208,6 +208,154 @@ function runMasterJs(options) {
   // }
 
   // function handleResponse(request,
+	function toPage(page) {
+		offset = 10 * page - 10;
+		getAjax(offset);
+	}
+
+	//get AJAX for peges
+	function getAjax(offset) {
+		var xhttp = getRequestObject();
+		var requestUrl = '/missingPet?limit=10&skip=' + offset + '&sort=updatedAt%20DESC';
+		xhttp.onreadystatechange = function() {
+			if(this.readyState == 4 && this.status == 200) {
+  				// document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
+  				// console.log('this', JSON.parse(this.responseText)[0]);
+  				var htmlContent = JSON.parse(this.responseText);
+  				// var source = $("#ajax-comment").html();
+				// var template = Handlebars.compile(source);
+				// var source2 = getCardHandlerTemplate();
+				// console.log('source', source2);
+				// var template2 = Handlebars.compile(source2);
+				getCardHandlerTemplate(htmlContent);
+				// replace new cards into DOM
+  				// for(var i = 0; i < htmlContent.length; i++) {
+  				// 	(function(cardNum) {
+  				// 		if(cardNum === 0) {
+  				// 			$('#row').html(template2(htmlContent[cardNum]));
+  				// 		} else {
+  				// 			$("#row").append(template2(htmlContent[cardNum]));
+  				// 		}
+  				// 	})(i);
+  				// }
+
+  				// document.getElementById("row").innerHTML = createNewCardByAjax(JSON.parse(this.responseText));
+  				
+				}
+			};
+		xhttp.open("GET", requestUrl, true);
+		xhttp.send(null);
+	}
+
+	//get card template
+	function getCardHandlerTemplate(htmlContent) {
+		var templateContent = getRequestObject();
+		templateContent.onreadystatechange = function() {
+			if(this.readyState == 4 && this.status == 200) {
+				console.log(this.responseText);
+				var sorce = this.responseText;
+				var template = Handlebars.compile(this.responseText);
+				appendNewCardInNewPage(template, htmlContent); 				
+  				paginationClassesForNewPage(offset);
+  				hidePicture(total - offset);
+          $("html, body").scrollTop(0);
+			}
+		}
+		templateContent.open("Get", cardHandlerUrl, true);
+		templateContent.send(null);
+	}
+
+	function appendNewCardInNewPage(template, htmlContent) {
+		for(var i = 0; i < htmlContent.length; i++) {
+			if(i === 0) {
+				$('#row').html(template(htmlContent[i]));
+			} else {
+				$("#row").append(template(htmlContent[i]));
+			}
+		}
+	}
+
+	
+
+	//return exchange datatype
+	function getRequestObject() {
+	  if (window.XMLHttpRequest) {
+	    return (new XMLHttpRequest());
+	  } 
+	  else if (window.ActiveXObject) {
+	    // For very old IE browsers (optional)
+	    return (new ActiveXObject("Microsoft.XMLHTTP"));
+	  } 
+	  else {
+	    // global.alert("Ajax is not supported!");
+	    return(null); 
+	  }
+	}
+
+	//function to change classes for fitting new page
+	function paginationClassesForNewPage(offset) {
+
+		$('.page').removeClass('disabled');
+		$('.page').removeClass('active');
+		// if offset <= 0, set previous button to disabled
+		if(Number(offset) <= 0) {
+			$('#pagePrevious').removeClass('waves-effect');
+			$('#pagePrevious').addClass('disabled');
+		}
+		// active current page button
+		$('#page' + Math.floor((offset/10) + 1)).addClass('active');
+		//if it is last page, set next button to disabled
+		if(Number(offset) === ((totalPage * 10) - 10) || Number(offset) === Number(total)) {
+			$('#pageNext').removeClass('waves-effect');
+			$('#pageNext').addClass('disabled');
+		}
+	}
+
+
+
+	// Handlebars helper for cards
+	// translate gender from EN to ZH-TW 
+	Handlebars.registerHelper("genderToChinses", function(gender){
+		if(gender == 'male') {
+			return '公';
+		}
+		else if(gender == 'female') {
+			return '母';
+		}		
+	});
+
+	//change moment format. for example: 10/03/2016. it's related to local date format
+	Handlebars.registerHelper("localDateFormat", function(date){
+		return moment(date).format('L');
+	});
+
+	//choose latest updated/created date
+	Handlebars.registerHelper("lastUpdatedDate", function(createdAt, updatedAt){
+		var mostDistantFuture = moment().max(createdAt, updatedAt);
+		return moment(mostDistantFuture).format('L');
+	});
+
+	getCardHandlerTemplate(options.missingPets);
+	// function getTemplete(cardHandlerUrl) {
+	// 	var source = getRequestObject();
+	// 	source.onreadystatechange = function() {
+
+	// 	}
+	// }
+
+	// function handleResponse(xhttp,
+ //                        	cardHandlerUrl) {
+	// if((xhttp.readyState == 4) &&
+	//   (xhttp.status == 200)) {
+	//     	var htmlContent = JSON.parse(xhttp.responseText);
+	//     	$("#row").html(template(htmlContent[0]) + xhttp.responseText);
+	//     	console.log(xhttp.responseText);
+	//       	paginationClassesForNewPage(offset);
+	// 		hidePicture()
+	//   }
+	// }
+
+	// function handleResponse(request,
  //                        responseHandler,
  //                        isJsonResponse) {
   //  if ((request.readyState == 4) &&
